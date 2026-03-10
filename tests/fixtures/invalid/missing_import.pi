@@ -1,0 +1,6 @@
+# Error: Import que no existe
+project test
+   import nonexistent_module
+
+task main
+   goal do something

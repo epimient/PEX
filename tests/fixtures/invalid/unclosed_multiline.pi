@@ -1,0 +1,5 @@
+# Error: Bloque multilínea sin cerrar
+task broken
+   sql """
+       SELECT * FROM users
+       WHERE id = 1

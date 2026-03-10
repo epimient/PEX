@@ -1,0 +1,16 @@
+# Prueba de bloques multilínea
+project multiline_test
+
+tool my_db
+    provider postgres
+    source $DATABASE_URL
+
+task load_sales
+    input my_db
+    sql """
+        select month, revenue
+        from sales
+        where date >= current_date - interval '12 months'
+        order by 1 desc
+    """
+    output sales_data

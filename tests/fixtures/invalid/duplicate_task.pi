@@ -1,0 +1,8 @@
+# Error: Tarea duplicada
+project test
+
+task analyze
+   goal analyze data
+
+task analyze
+   goal analyze again

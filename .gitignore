@@ -3,10 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Entorno virtual (si lo hubiera)
+# Entorno virtual
 venv/
 env/
 .env
+.venv/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Archivos de la base de datos de test
 examples/*.db
@@ -14,3 +20,5 @@ examples/*.db
 # Entorno de trabajo
 .vscode/
 .idea/
+.DS_Store
+

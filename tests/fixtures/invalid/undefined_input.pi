@@ -1,0 +1,6 @@
+# Error: Input no declarado
+project test
+
+task process
+   input undefined_input
+   goal process data

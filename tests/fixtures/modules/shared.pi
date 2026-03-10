@@ -1,0 +1,8 @@
+# Módulo compartido en subdirectorio
+tool shared_db
+   provider sqlite
+   source ":memory:"
+
+model shared_model
+   provider openai
+   name gpt-4

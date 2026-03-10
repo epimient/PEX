@@ -1,0 +1,19 @@
+# Pipeline simple de demostración
+project demo
+
+model analyst
+   provider openai
+   name gpt-4
+
+task analyze
+   goal analyze the input data
+   output analysis
+
+task report
+   input analysis
+   goal generate a summary report
+   output final_report
+
+pipeline demo_flow
+   step analyze
+   step report

@@ -1,0 +1,10 @@
+# Error: Referencia a step que no existe
+project test
+
+task step_a
+   goal do something
+   output result
+
+pipeline broken
+   step step_a
+   step nonexistent_step

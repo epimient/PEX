@@ -1,0 +1,9 @@
+# Proyecto que usa import relativo
+project relative_import_test
+   import ../fixtures/modules/shared
+
+task main
+   use shared_db
+   model shared_model
+   goal test relative imports
+   output result

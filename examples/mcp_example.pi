@@ -1,0 +1,28 @@
+# Ejemplo de integración MCP en PEX
+project mcp_example
+
+# Tool MCP para búsqueda web
+tool web_search
+   provider mcp
+   source http://localhost:8080
+
+# Tool MCP para acceso a documentos
+tool docs
+   provider mcp
+   source http://localhost:8080:resource
+
+# Modelo que usa servidor MCP local
+model local_ai
+   provider mcp
+   name http://localhost:8080:llama3
+
+# Tarea que usa tools MCP
+task research
+   use web_search
+   use docs
+   model local_ai
+   goal search for recent AI trends and summarize findings
+   output summary
+
+pipeline mcp_workflow
+   step research

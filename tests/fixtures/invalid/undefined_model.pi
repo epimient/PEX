@@ -1,0 +1,6 @@
+# Error: Model no declarado en task
+project test
+
+task analyze
+   model undefined_model
+   goal analyze data

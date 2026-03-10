@@ -1,0 +1,27 @@
+project sql_test
+
+# Prueba de bloques multilínea reales v0.3
+external_db = "postgres://localhost:5432"
+
+tool query_tool
+    provider "sql_adapter"
+    source external_db
+
+model analyst
+    provider "openai"
+    name "gpt-4"
+
+task fetchData
+    use query_tool
+    model analyst
+    sql """
+        SELECT name, price
+        FROM products
+        WHERE category = 'electronics'
+          AND stock > 0
+        ORDER BY price DESC;
+    """
+    output products_data
+
+pipeline main
+    step fetchData

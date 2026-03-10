@@ -182,19 +182,74 @@ class Parser:
         if self._current().type == TokenType.DEDENT:
             self._advance()
 
-    def _read_property_value(self) -> str:
-        """Lee el valor de una propiedad (ident, string, env_var, text, número)."""
-        tok = self._current()
-        if tok.type in (TokenType.IDENT, TokenType.STRING, TokenType.TEXT,
-                        TokenType.NUMBER, TokenType.BOOLEAN):
-            self._advance()
-            return tok.value
-        elif tok.type == TokenType.ENV_VAR:
-            self._advance()
-            return f"${tok.value}"
-        else:
-            # Capturar todo como texto si no hay token claro
-            return ""
+    # ── Helpers para parseo de propiedades ────────────────────────
+
+    def _parse_block_properties(self, block, property_map: dict, skip_keywords: list = None):
+        """
+        Helper genérico para parsear propiedades de bloques.
+
+        Args:
+            block: El objeto bloque a completar.
+            property_map: Dict mapeando nombre de propiedad a (atributo, tipo, append).
+                         Ej: {"provider": ("provider", str, False)}
+            skip_keywords: Lista de keywords a ignorar (para manejo especial externo).
+        """
+        skip_keywords = skip_keywords or []
+
+        if self._enter_block():
+            while not self._at_block_end():
+                self._skip_newlines()
+                if self._at_block_end():
+                    break
+
+                tok = self._current()
+                if tok.type == TokenType.KEYWORD:
+                    prop = tok.value
+
+                    # Skip keywords que se manejan externamente
+                    if prop in skip_keywords:
+                        self._advance()
+                        self._skip_newlines()
+                        continue
+
+                    self._advance()
+                    val = self._parse_value()
+
+                    if prop in property_map:
+                        attr, expected_type, is_list = property_map[prop]
+
+                        # Validar tipo si es IdentRef requerido
+                        if expected_type == IdentRef and not isinstance(val, IdentRef):
+                            raise ParseError(
+                                f"Se esperaba un identificador para '{prop}', se encontró {type(val).__name__}",
+                                tok.line
+                            )
+
+                        # Asignar valor
+                        if is_list:
+                            getattr(block, attr).append(val)
+                        else:
+                            # Extraer valor string si es necesario
+                            if expected_type == str and hasattr(val, "value"):
+                                setattr(block, attr, val.value)
+                            else:
+                                setattr(block, attr, val)
+
+                    self._skip_newlines()
+                else:
+                    self._advance()
+                    self._skip_newlines()
+            self._exit_block()
+
+    def _parse_ident_list_property(self, block, attr: str, keyword: str):
+        """Parsea una propiedad que es una lista de IdentRef (ej: steps, uses)."""
+        val = self._parse_value()
+        if not isinstance(val, IdentRef):
+            raise ParseError(
+                f"Se esperaba un identificador para '{keyword}', se encontró {type(val).__name__}",
+                self._current().line
+            )
+        getattr(block, attr).append(val)
 
     # ── Parsers de bloques específicos ───────────────────────────
 
@@ -210,8 +265,13 @@ class Parser:
                 tok = self._current()
                 if tok.type == TokenType.KEYWORD and tok.value == "import":
                     self._advance()
-                    mod = self._read_property_value()
-                    block.imports.append(mod)
+                    # Soportar tanto IDENT como STRING para imports
+                    if self._current().type == TokenType.STRING:
+                        mod_tok = self._advance()
+                        block.imports.append(mod_tok.value)
+                    else:
+                        mod_tok = self._expect(TokenType.IDENT)
+                        block.imports.append(mod_tok.value)
                     self._skip_newlines()
                 else:
                     self._advance()
@@ -224,33 +284,54 @@ class Parser:
         _, name, line = self._consume_block_name()
         block = TaskBlock(name=name, line=line)
 
+        # Mapa de propiedades para task
+        property_map = {
+            # (atributo, tipo esperado, es lista)
+            "input": ("inputs", None, True),      # None = cualquier tipo
+            "context": ("contexts", None, True),
+            "use": ("uses", IdentRef, True),
+            "model": ("model", IdentRef, False),
+            "goal": ("goal", None, False),
+            "sql": ("sql", None, False),
+            "query": ("query", None, False),
+        }
+
         if self._enter_block():
             while not self._at_block_end():
                 self._skip_newlines()
                 if self._at_block_end():
                     break
+
                 tok = self._current()
                 if tok.type == TokenType.KEYWORD:
                     prop = tok.value
                     self._advance()
-                    val = self._read_property_value()
 
-                    if prop == "input":
-                        block.inputs.append(val)
-                    elif prop == "context":
-                        block.contexts.append(val)
-                    elif prop == "use":
-                        block.uses.append(val)
-                    elif prop == "model":
-                        block.model = val
-                    elif prop == "goal":
-                        block.goal = val
-                    elif prop == "output":
-                        block.output = val
-                    elif prop == "sql":
-                        block.sql = val
-                    elif prop == "query":
-                        block.query = val
+                    # Manejo especial para output (no es lista, es string directo)
+                    if prop == "output":
+                        tok_out = self._expect(TokenType.IDENT)
+                        block.output = tok_out.value
+                        self._skip_newlines()
+                        continue
+
+                    # Usar helper para propiedades estándar
+                    if prop in property_map:
+                        val = self._parse_value()
+                        attr, expected_type, is_list = property_map[prop]
+
+                        # Validar tipo si es IdentRef requerido
+                        if expected_type == IdentRef and not isinstance(val, IdentRef):
+                            raise ParseError(
+                                f"Se esperaba un identificador para '{prop}', se encontró {type(val).__name__}",
+                                tok.line
+                            )
+
+                        # Asignar valor
+                        if is_list:
+                            getattr(block, attr).append(val)
+                        else:
+                            setattr(block, attr, val)
+
                     self._skip_newlines()
                 else:
                     self._advance()
@@ -263,29 +344,13 @@ class Parser:
         _, name, line = self._consume_block_name()
         block = AgentBlock(name=name, line=line)
 
-        if self._enter_block():
-            while not self._at_block_end():
-                self._skip_newlines()
-                if self._at_block_end():
-                    break
-                tok = self._current()
-                if tok.type == TokenType.KEYWORD:
-                    prop = tok.value
-                    self._advance()
-                    val = self._read_property_value()
+        property_map = {
+            "goal": ("goal", None, False),
+            "model": ("model", IdentRef, False),
+            "use": ("uses", IdentRef, True),
+        }
 
-                    if prop == "goal":
-                        block.goal = val
-                    elif prop == "model":
-                        block.model = val
-                    elif prop == "use":
-                        block.uses.append(val)
-                    self._skip_newlines()
-                else:
-                    self._advance()
-                    self._skip_newlines()
-            self._exit_block()
-
+        self._parse_block_properties(block, property_map)
         return block
 
     def _parse_pipeline(self) -> PipelineBlock:
@@ -300,8 +365,7 @@ class Parser:
                 tok = self._current()
                 if tok.type == TokenType.KEYWORD and tok.value == "step":
                     self._advance()
-                    step_name = self._read_property_value()
-                    block.steps.append(step_name)
+                    self._parse_ident_list_property(block, "steps", "step")
                     self._skip_newlines()
                 else:
                     self._advance()
@@ -314,54 +378,24 @@ class Parser:
         _, name, line = self._consume_block_name()
         block = ToolBlock(name=name, line=line)
 
-        if self._enter_block():
-            while not self._at_block_end():
-                self._skip_newlines()
-                if self._at_block_end():
-                    break
-                tok = self._current()
-                if tok.type == TokenType.KEYWORD:
-                    prop = tok.value
-                    self._advance()
-                    val = self._read_property_value()
+        property_map = {
+            "provider": ("provider", str, False),
+            "source": ("source", None, False),
+        }
 
-                    if prop == "provider":
-                        block.provider = val
-                    elif prop == "source":
-                        block.source = val
-                    self._skip_newlines()
-                else:
-                    self._advance()
-                    self._skip_newlines()
-            self._exit_block()
-
+        self._parse_block_properties(block, property_map)
         return block
 
     def _parse_model(self) -> ModelBlock:
         _, name, line = self._consume_block_name()
         block = ModelBlock(name=name, line=line)
 
-        if self._enter_block():
-            while not self._at_block_end():
-                self._skip_newlines()
-                if self._at_block_end():
-                    break
-                tok = self._current()
-                if tok.type == TokenType.KEYWORD:
-                    prop = tok.value
-                    self._advance()
-                    val = self._read_property_value()
+        property_map = {
+            "provider": ("provider", str, False),
+            "name": ("model_name", None, False),
+        }
 
-                    if prop == "provider":
-                        block.provider = val
-                    elif prop == "name":
-                        block.model_name = val
-                    self._skip_newlines()
-                else:
-                    self._advance()
-                    self._skip_newlines()
-            self._exit_block()
-
+        self._parse_block_properties(block, property_map)
         return block
 
     def _parse_memory(self) -> MemoryBlock:
@@ -377,11 +411,18 @@ class Parser:
                 if tok.type == TokenType.KEYWORD:
                     prop = tok.value
                     self._advance()
-                    val = self._read_property_value()
 
                     if prop == "scope":
-                        block.scope = val
-                    self._skip_newlines()
+                        val = self._parse_value()
+                        block.scope = val.value if hasattr(val, "value") else str(val)
+                    elif prop == "ttl":
+                        val = self._parse_value()
+                        # TTL debe ser número
+                        if hasattr(val, "value"):
+                            block.ttl = int(val.value) if isinstance(val.value, (int, float)) else int(val.value)
+                        self._skip_newlines()
+                    else:
+                        self._skip_newlines()
                 else:
                     self._advance()
                     self._skip_newlines()
@@ -400,13 +441,31 @@ class Parser:
                     break
                 tok = self._current()
                 if tok.type == TokenType.IDENT:
-                    block.fields.append(tok.value)
+                    # Campo simple o con tipo: field_name [: type]
+                    field_name = tok.value
                     self._advance()
+
+                    # Verificar si hay : tipo
+                    if self._current().type == TokenType.COLON:
+                        self._advance()  # consumir :
+                        type_tok = self._expect(TokenType.IDENT)
+                        block.add_field(field_name, type_tok.value)
+                    else:
+                        block.add_field(field_name)
                     self._skip_newlines()
                 elif tok.type == TokenType.KEYWORD and tok.value == "field":
                     self._advance()
-                    fname = self._read_property_value()
-                    block.fields.append(fname)
+                    fname = self._parse_value()
+                    field_name = fname.value if hasattr(fname, "value") else str(fname)
+
+                    # Verificar si hay : tipo
+                    field_type = None
+                    if self._current().type == TokenType.COLON:
+                        self._advance()
+                        type_tok = self._expect(TokenType.IDENT)
+                        field_type = type_tok.value
+
+                    block.add_field(field_name, field_type)
                     self._skip_newlines()
                 else:
                     self._advance()
@@ -428,13 +487,30 @@ class Parser:
                 if tok.type == TokenType.KEYWORD:
                     prop = tok.value
                     self._advance()
-                    val = self._read_property_value()
 
                     if prop == "table":
-                        block.table = val
+                        val = self._parse_value()
+                        if hasattr(val, "value"):
+                            block.table = val.value
+                        elif hasattr(val, "name"):
+                            block.table = val.name
+                        else:
+                            block.table = str(val)
                     elif prop == "field":
-                        block.fields.append(val)
-                    self._skip_newlines()
+                        # field NAME [: TYPE]
+                        self._skip_newlines()
+                        if self._current().type == TokenType.IDENT:
+                            field_name = self._current().value
+                            self._advance()
+                            field_type = None
+
+                            if self._current().type == TokenType.COLON:
+                                self._advance()
+                                type_tok = self._expect(TokenType.IDENT)
+                                field_type = type_tok.value
+
+                            block.add_field(field_name, field_type)
+                        self._skip_newlines()
                 else:
                     self._advance()
                     self._skip_newlines()

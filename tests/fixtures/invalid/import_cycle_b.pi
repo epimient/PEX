@@ -1,0 +1,6 @@
+# Ciclo de imports: B importa A
+project cycle_b
+   import cycle_a
+
+task helper
+   goal help

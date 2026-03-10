@@ -1,0 +1,10 @@
+# Proyecto con imports
+project imports_demo
+   import imports_tools
+   import imports_models
+
+task main
+   use demo_db
+   model demo_model
+   goal demonstrate imports work
+   output result

@@ -1,0 +1,4 @@
+# Módulo de tools para imports_project.pi
+tool demo_db
+   provider sqlite
+   source ":memory:"

@@ -85,9 +85,46 @@ def get_db_adapter(provider: str, source_url: str) -> Optional[DBAdapter]:
 def get_file_adapter(provider: str, source_path: str) -> Optional[Any]:
     """Retorna la instancia del adaptador de Archivos según el proveedor."""
     provider = provider.lower() if provider else ""
-    
+
     if provider in ("csv", "json", "txt", "md"):
         from pex.adapters.file import FileAdapter
         return FileAdapter(source_path, format_type=provider)
-        
+
     return None
+
+
+def get_mcp_adapter(adapter_type: str, server_url: str, server_name: str = "mcp"):
+    """
+    Crea un adapter MCP según el tipo.
+
+    Args:
+        adapter_type: Tipo de adapter ("tool", "resource", "prompt", "llm")
+        server_url: URL del servidor MCP
+        server_name: Nombre del servidor
+
+    Returns:
+        Instancia del adapter MCP o None
+    """
+    try:
+        from pex.adapters.mcp import (
+            get_mcp_tool_adapter,
+            get_mcp_resource_adapter,
+            get_mcp_prompt_adapter,
+            MCPLLMAdapter
+        )
+
+        adapter_type = adapter_type.lower() if adapter_type else ""
+
+        if adapter_type == "tool":
+            return get_mcp_tool_adapter(server_url, server_name)
+        elif adapter_type == "resource":
+            return get_mcp_resource_adapter(server_url, server_name)
+        elif adapter_type == "prompt":
+            return get_mcp_prompt_adapter(server_url, server_name)
+        elif adapter_type == "llm":
+            return MCPLLMAdapter(server_url, server_name)
+        else:
+            return None
+
+    except ImportError:
+        return None

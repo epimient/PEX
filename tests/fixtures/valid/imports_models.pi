@@ -1,0 +1,4 @@
+# Módulo de models para imports_project.pi
+model demo_model
+   provider openai
+   name gpt-4

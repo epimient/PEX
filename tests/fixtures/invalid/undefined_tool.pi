@@ -1,0 +1,6 @@
+# Error: Tool no declarada en task
+project test
+
+task query_db
+   use undefined_tool
+   goal query database

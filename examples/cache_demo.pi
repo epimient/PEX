@@ -1,0 +1,28 @@
+# Ejemplo de caché en PEX
+project cache_demo
+
+# Configurar memoria con TTL de 60 segundos
+memory session_cache
+   scope session
+   ttl 60
+
+model analyst
+   provider openai
+   name gpt-4
+
+tool sales_db
+   provider sqlite
+   source ":memory:"
+
+# Tarea que se beneficia de caché
+task analyze_sales
+   input sales_db
+   model analyst
+   goal analyze sales trends and provide insights
+   output analysis
+
+# Pipeline que ejecuta la misma tarea múltiples veces
+pipeline cached_analysis
+   step analyze_sales
+   step analyze_sales  # ← Este usará caché!
+   step analyze_sales  # ← Este también!

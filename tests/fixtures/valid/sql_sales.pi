@@ -1,0 +1,26 @@
+# Demo de consulta SQL multilínea
+project sales_demo
+
+tool sales_db
+   provider sqlite
+   source ":memory:"
+
+model analyst
+   provider openai
+   name gpt-4
+
+task get_sales
+   input sales_db
+   sql """
+       SELECT product, region, SUM(revenue) as total
+       FROM sales
+       GROUP BY product, region
+       ORDER BY total DESC
+   """
+   output sales_data
+
+task analyze_sales
+   input sales_data
+   model analyst
+   goal identify top performing products by region
+   output insights

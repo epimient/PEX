@@ -1,0 +1,15 @@
+# Ejemplo de agente inteligente
+project agent_demo
+
+model researcher
+   provider openai
+   name gpt-4
+
+tool web_search
+   provider web
+
+agent market_analyst
+   model researcher
+   use web_search
+   goal investigate current market trends in AI
+   output market_report
