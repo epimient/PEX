@@ -1,0 +1,29 @@
+# Archivo para probar multilíneas y comentarios omitidos en PEX v0.1.1
+
+project multiline_test
+
+tool my_db
+    provider postgres
+    source $DATABASE_URL
+
+task load_sales
+    input my_db
+
+    # Comentario interno que se saltará
+    sql """
+        select month, revenue
+        from sales
+        where date >= current_date - interval '12 months'
+        order by 1 desc
+    """
+
+    output sales_data
+
+task review_data
+    input sales_data
+    goal Revisa
+    los datos
+    y diles
+    que todo
+    está bien
+    output null

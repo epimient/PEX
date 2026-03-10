@@ -1,0 +1,37 @@
+# Prueba de Integración Real PEX v0.1: SQLite + LLM (OpenAI)
+
+project real_test
+
+# 1. Configurar herramienta de Base de Datos
+tool my_database
+   provider sqlite
+   source examples/test_sales.db
+
+# 2. Configurar Modelo de Lenguaje
+model analyst
+   provider openai
+   name gpt-3.5-turbo
+
+# 3. Tarea 1: Consultar BD real
+task get_latam_sales
+   input my_database
+   sql """
+       SELECT product, revenue 
+       FROM sales 
+       WHERE region = 'latam'
+       ORDER BY revenue DESC
+   """
+   goal extract raw sales data for latin america
+   output latam_data
+
+# 4. Tarea 2: Enviar los datos obtenidos al LLM real
+task generate_insights
+   input latam_data
+   model analyst
+   goal Eres un analista de ventas experto. Toma los datos de entrada obtenidos de la BD y redacta un reporte ejecutivo de 2 párrafos identificando el producto más rentable y sugiriendo una estrategia para potenciar el menos rentable.
+   output executive_report
+
+# 5. Ejecutar la secuencia
+pipeline analyze
+   step get_latam_sales
+   step generate_insights

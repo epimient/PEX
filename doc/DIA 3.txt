@@ -1,0 +1,684 @@
+PEX — Sintaxis oficial v0.1
+1. Principios de sintaxis
+La sintaxis de PEX se construye sobre estas reglas:
+legible como instrucciones de trabajo
+
+mínima en símbolos
+
+bloques por indentación
+
+semántica antes que ceremonia
+
+pensada para humanos y para un parser simple
+
+Principio central:
+PEX debe leerse como un plan estructurado para una inteligencia.
+
+2. Reglas generales
+2.1 Bloques por indentación
+Igual que en Python, los bloques se definen por indentación.
+Ejemplo:
+task summarize_article
+   input article.txt
+   goal summarize in five points
+2.2 Un bloque comienza con keyword + nombre
+Forma general:
+<keyword> <name>
+   <property> <value>
+2.3 Sin llaves ni punto y coma
+No se usan:
+{}
+;
+2.4 Sin dos puntos obligatorios
+La forma base no usa :.
+Correcto:
+task forecast_sales
+   input sales_data
+   goal predict next month revenue
+No oficial como estilo principal:
+task forecast_sales:
+   input: sales_data
+   goal: predict next month revenue
+2.5 Variables con =
+Las asignaciones simples usan =.
+region = "latam"
+months = 12
+
+3. Bloques principales del lenguaje
+Los bloques oficiales de primer nivel en PEX v0.1 son:
+project
+task
+agent
+pipeline
+tool
+model
+memory
+import
+
+4. Propiedades oficiales v0.1
+Las propiedades base son:
+input
+goal
+context
+output
+use
+provider
+name
+source
+model
+step
+scope
+Más adelante pueden crecer, pero estas son suficientes para arrancar.
+
+5. Bloque project
+project define la unidad principal del sistema.
+Forma base
+project <name>
+   import <module>
+Ejemplo
+project sales_ai
+   import tools
+   import models
+   import tasks
+   import pipelines
+Regla
+Un archivo project.pi debería contener normalmente un solo bloque project.
+
+6. Bloque task
+task es la unidad básica de intención.
+Forma mínima
+task <name>
+   goal <objective>
+Forma recomendada
+task <name>
+   input <source>
+   goal <objective>
+   output <result>
+Ejemplo simple
+task summarize_article
+   input article.txt
+   goal summarize in five points
+   output summary
+Ejemplo ampliado
+task market_report
+   input sales_db
+   context last_12_months
+   use web_search
+   model analyst
+   goal analyze trends and generate report
+   output report
+Regla
+Un task debe tener al menos:
+nombre
+
+goal
+
+
+7. Bloque agent
+agent representa una entidad inteligente con propósito.
+Forma mínima
+agent <name>
+   goal <objective>
+Ejemplo
+agent predictor
+   goal forecast future sales
+Forma ampliada
+agent predictor
+   model forecast_model
+   use sales_db
+   use python_forecaster
+   goal predict monthly sales
+Regla
+Un agente debe tener al menos:
+nombre
+
+goal
+
+
+8. Bloque pipeline
+pipeline compone tareas o agentes.
+Forma base
+pipeline <name>
+   step <name>
+   step <name>
+Ejemplo
+pipeline monthly_forecast
+   step analyze_sales
+   step predict_sales
+   step generate_report
+Regla
+Cada step referencia por nombre un task o agent ya definido.
+
+9. Bloque tool
+tool declara una capacidad externa.
+Forma base
+tool <name>
+   provider <provider>
+Ejemplo
+tool web_search
+   provider web
+Ejemplo con fuente
+tool sales_db
+   provider postgres
+   source $SALES_DB_URL
+Ejemplo MCP
+tool docs
+   provider mcp
+   source company_docs
+Regla
+Toda tool debe tener al menos:
+nombre
+
+provider
+
+
+10. Bloque model
+model declara un modelo de IA accesible por el runtime.
+Forma base
+model <name>
+   provider <provider>
+   name <model_name>
+Ejemplo
+model analyst
+   provider openai
+   name $OPENAI_MODEL
+Regla
+Todo model debe tener:
+nombre lógico del bloque
+
+provider
+
+name
+
+
+11. Bloque memory
+memory define un recurso de memoria contextual.
+Forma base
+memory <name>
+   scope <scope>
+Ejemplo
+memory session_context
+   scope session
+Ejemplo ampliado
+memory user_profile
+   scope persistent
+Valores iniciales sugeridos para scope
+session
+project
+persistent
+
+12. import
+import carga módulos del proyecto.
+Ejemplo
+project sales_ai
+   import tools
+   import models
+   import tasks
+   import pipelines
+Regla
+En v0.1, import tasks puede resolver a tasks.pi.
+
+13. input, context, output, use
+Estas propiedades son repetibles si hace falta.
+Inputs múltiples
+task investor_pitch
+   input startup_notes
+   input market_report
+   goal create investor pitch
+Contextos múltiples
+task investor_pitch
+   context startup_notes
+   context market_report
+   goal create investor pitch
+Tools múltiples
+task research
+   use web_search
+   use docs
+   goal analyze recent AI trends
+
+14. Variables
+PEX v0.1 permite variables simples.
+Ejemplo
+region = "latam"
+period = "last_12_months"
+months = 12
+debug = true
+Uso posterior
+task market_analysis
+   context region
+   context period
+   goal analyze market trends
+Tipos literales base sugeridos
+string
+
+integer
+
+float
+
+boolean
+
+Ejemplos:
+region = "latam"
+limit = 10
+temperature = 0.2
+debug = true
+
+15. Variables de entorno
+Las variables externas se referencian con $.
+Ejemplo
+model analyst
+   provider openai
+   name $OPENAI_MODEL
+tool sales_db
+   provider postgres
+   source $SALES_DB_URL
+Regla
+Las referencias $VAR se resuelven antes del planner.
+
+16. Referencias por nombre
+PEX usa referencias nominales simples.
+Ejemplo:
+task analyze_sales
+   input sales_db
+   model analyst
+   goal identify trends
+   output trends
+Aquí:
+sales_db referencia un tool
+
+analyst referencia un model
+
+Otro ejemplo:
+pipeline monthly_forecast
+   step analyze_sales
+   step predict_sales
+Aquí cada step referencia tareas o agentes.
+
+17. Estilo recomendado de nombres
+Mi recomendación para PEX:
+snake_case para tasks y pipelines
+
+nombres cortos y descriptivos
+
+evitar espacios en identificadores
+
+Buenos ejemplos
+summarize_article
+market_report
+predict_sales
+monthly_forecast
+
+18. Comentarios
+Deberíamos definirlos ya.
+Mi propuesta:
+# this is a comment
+Ejemplo
+# sales analysis pipeline
+pipeline monthly_forecast
+   step analyze_sales
+   step predict_sales
+Esto mantiene familiaridad con Python.
+
+19. Ejemplo completo v0.1
+.env
+OPENAI_API_KEY=sk-xxxxx
+OPENAI_MODEL=gpt-5
+SALES_DB_URL=postgres://localhost/sales
+project.pi
+project sales_ai
+   import tools
+   import models
+   import tasks
+   import pipelines
+tools.pi
+tool sales_db
+   provider postgres
+   source $SALES_DB_URL
+
+tool web_search
+   provider web
+models.pi
+model analyst
+   provider openai
+   name $OPENAI_MODEL
+tasks.pi
+task analyze_sales
+   input sales_db
+   model analyst
+   goal identify trends in monthly sales
+   output trends
+
+task predict_sales
+   input trends
+   model analyst
+   goal predict next month revenue
+   output forecast
+pipelines.pi
+pipeline monthly_forecast
+   step analyze_sales
+   step predict_sales
+Esto ya se ve bastante serio.
+
+20. Reglas oficiales de sintaxis v0.1
+Regla 1
+Los bloques se definen por indentación.
+Regla 2
+Cada bloque comienza con keyword + name.
+Regla 3
+Las propiedades usan la forma key value.
+Regla 4
+No se usan llaves ni punto y coma.
+Regla 5
+Los dos puntos no forman parte de la sintaxis base oficial.
+Regla 6
+Las asignaciones usan =.
+Regla 7
+Las referencias entre bloques se hacen por nombre.
+Regla 8
+Las variables de entorno usan $VARIABLE_NAME.
+Regla 9
+Los comentarios empiezan con #.
+Regla 10
+La legibilidad tiene prioridad sobre la densidad sintáctica.
+
+21. Gramática conceptual mínima
+Sin volverlo formalísimo todavía, la gramática mental sería algo así:
+program         -> statement*
+statement       -> block | assignment | comment
+
+block           -> project_block
+               | task_block
+               | agent_block
+               | pipeline_block
+               | tool_block
+               | model_block
+               | memory_block
+
+assignment      -> IDENT "=" VALUE
+comment         -> "#" TEXT
+
+project_block   -> "project" IDENT INDENT project_item*
+project_item    -> "import" IDENT
+
+task_block      -> "task" IDENT INDENT task_item*
+task_item       -> "input" VALUE
+               | "context" VALUE
+               | "use" IDENT
+               | "model" IDENT
+               | "goal" TEXT
+               | "output" IDENT
+
+agent_block     -> "agent" IDENT INDENT agent_item*
+agent_item      -> "use" IDENT
+               | "model" IDENT
+               | "goal" TEXT
+
+pipeline_block  -> "pipeline" IDENT INDENT pipeline_item*
+pipeline_item   -> "step" IDENT
+
+tool_block      -> "tool" IDENT INDENT tool_item*
+tool_item       -> "provider" IDENT
+               | "source" VALUE
+
+model_block     -> "model" IDENT INDENT model_item*
+model_item      -> "provider" IDENT
+               | "name" VALUE
+
+memory_block    -> "memory" IDENT INDENT memory_item*
+memory_item     -> "scope" IDENT
+
+22. Qué falta después de esto
+Con esto ya tenemos:
+filosofía
+
+arquitectura
+
+configuración
+
+sintaxis base
+
+Los siguientes pasos naturales serían dos:
+A. definir el parser y el AST oficial de PEX v0.1
+ B. crear el primer prototipo del intérprete en Python
+Mi recomendación es que ahora pasemos a definir el AST, porque eso conecta la sintaxis con la implementación real.
+como se comunica con bases de datos?, si admite POO como seria
+Con bases de datos, PEX no debería hablar “crudo” al inicio como un ORM gigante, sino por una capa de capacidades del runtime. Y sobre POO: sí podría admitirla, pero como soporte secundario, no como paradigma central.
+Te lo separo.
+1. Cómo se comunicaría PEX con bases de datos
+La idea más limpia es esta:
+en PEX declaras una tool o resource
+
+el runtime sabe cómo conectarse
+
+las credenciales vienen de .env
+
+las tareas usan esa fuente como input o mediante consultas
+
+Opción base v0.1: tool de base de datos
+tool sales_db
+   provider postgres
+   source $SALES_DB_URL
+.env:
+SALES_DB_URL=postgres://user:pass@localhost:5432/sales
+Luego en un task:
+task analyze_sales
+   input sales_db
+   goal identify monthly sales trends
+   output trends
+Eso sería lo más simple, pero todavía muy abstracto.
+
+2. Cómo hacerlo más útil de verdad
+Necesitamos permitir consultas. Yo veo tres niveles.
+Nivel 1: consulta declarativa simple
+Muy PEX, muy limpio.
+task load_sales
+   input sales_db
+   query sales where date in last_12_months
+   output sales_data
+Aquí query no es SQL puro, sino una forma declarativa inicial.
+Otro ejemplo:
+task top_customers
+   input sales_db
+   query customers order by revenue desc limit 10
+   output top_list
+Ventaja:
+legible
+
+simple
+
+muy PEX
+
+Problema:
+tarde o temprano se queda corto
+
+
+Nivel 2: SQL explícito dentro de PEX
+Esto me parece necesario.
+task load_sales
+   input sales_db
+   sql """
+       select month, revenue
+       from sales
+       where date >= current_date - interval '12 months'
+   """
+   output sales_data
+Esto es muy realista porque:
+no reinventas SQL
+
+usas lo que ya existe
+
+PEX orquesta, no compite con SQL
+
+Yo sí lo metería.
+
+Nivel 3: models / entities opcionales
+Si luego quieres algo más elegante, PEX podría tener recursos tipados.
+entity Sale
+   table sales
+   fields month, revenue, region
+Y luego:
+task regional_sales
+   input Sale
+   filter region == "latam"
+   goal summarize sales performance
+Pero esto ya es más v0.3 o v1.0.
+
+3. Mi recomendación concreta para DB en PEX
+Para no enredarnos, yo haría esto:
+v0.1
+tool para conexión
+
+sql para consultas directas
+
+input para usar la fuente
+
+Ejemplo:
+tool sales_db
+   provider postgres
+   source $SALES_DB_URL
+
+task load_sales
+   input sales_db
+   sql """
+       select *
+       from sales
+       where date >= current_date - interval '12 months'
+   """
+   output sales_data
+Luego otro task:
+task forecast_sales
+   input sales_data
+   model analyst
+   goal predict next month revenue
+   output forecast
+Eso ya resuelve un caso real.
+
+4. Qué haría el runtime
+Cuando ve esto:
+input sales_db
+sql """
+   select * from sales
+"""
+el runtime:
+resuelve sales_db
+
+abre conexión con provider postgres
+
+ejecuta SQL
+
+convierte el resultado a dataset/tabular object
+
+lo pasa al planner/runtime para la tarea siguiente
+
+Eso es bastante limpio.
+
+5. ¿Y si no es SQL?
+PEX debería poder soportar otros proveedores:
+tool crm_db
+   provider mysql
+   source $CRM_DB_URL
+tool warehouse
+   provider bigquery
+   source $BQ_PROJECT
+tool analytics
+   provider snowflake
+   source $SNOWFLAKE_DSN
+La sintaxis base puede ser la misma. Cambia el adaptador del runtime.
+
+6. Ahora: si PEX admite POO, ¿cómo sería?
+Sí podría admitir algo de POO, pero yo lo haría ligero y subordinado al paradigma principal.
+O sea:
+PEX sigue siendo intent-oriented
+
+pero puede tener estructuras tipo objeto para modelar dominio y estado
+
+No haría esto el centro del lenguaje:
+class SalesPredictor
+class DashboardService
+class ReportBuilder
+Eso lo alejaría de su esencia.
+
+7. Qué sí tendría sentido como “POO ligera”
+A. Entities
+Para modelar cosas del dominio.
+entity Customer
+   field id
+   field name
+   field revenue
+entity Sale
+   field date
+   field amount
+   field region
+Esto sirve para:
+datos
+
+validación
+
+estructura
+
+
+B. Records / structs
+Aún mejor para v0.1 que clases completas.
+record Forecast
+   revenue
+   confidence
+   explanation
+Luego un task podría producir eso:
+task predict_sales
+   input sales_data
+   goal predict next month revenue
+   output Forecast
+Eso me gusta mucho más que clases tradicionales.
+
+C. Components con comportamiento acotado
+Si de verdad quieres encapsulación, podrías usar algo como:
+component SalesAnalyzer
+   use sales_db
+   model analyst
+Pero esto ya empieza a rozar otro paradigma.
+
+8. Si hubiera clases de verdad
+Si algún día PEX admite clases, yo las haría así de simples:
+class ForecastService
+   model analyst
+   use sales_db
+
+   task predict
+       input sales_data
+       goal predict next month revenue
+       output forecast
+Pero honestamente, esto ya se siente menos PEX y más híbrido raro.
+
+9. Mi recomendación honesta
+Para bases de datos
+Sí, totalmente:
+tool para conexión
+
+sql para consulta
+
+luego quizá entity
+
+Para POO
+Sí, pero no clases completas al inicio.
+Yo arrancaría con:
+record
+
+entity
+
+No con:
+class
+
+herencia
+
+polimorfismo complejo
+
+Porque PEX no necesita parecer Java ni Python OO para ser poderoso.
+
+10. Cómo lo resumiría oficialmente
+Podríamos decir:
+PEX interacts with databases through tools and runtime adapters.
+Y sobre POO:
+PEX is not object-oriented first, but it may support lightweight domain modeling through entities and records.
+En español:
+PEX no es orientado a objetos como paradigma principal, pero puede soportar modelado de dominio ligero mediante entidades y registros.
+

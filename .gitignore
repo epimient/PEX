@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entorno virtual (si lo hubiera)
+venv/
+env/
+.env
+
+# Archivos de la base de datos de test
+examples/*.db
+
+# Entorno de trabajo
+.vscode/
+.idea/

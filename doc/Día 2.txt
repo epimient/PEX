@@ -1,0 +1,579 @@
+PEX — Día 2
+Filosofía, paradigma y modelo conceptual
+El Día 2 se centró en definir cómo funciona mentalmente el lenguaje PEX, es decir, su paradigma, sus reglas de diseño y la forma en que los desarrolladores interactúan con sistemas inteligentes.
+1. Paradigma del lenguaje
+PEX no sigue un paradigma clásico como programación orientada a objetos o puramente funcional.
+PEX se define como:
+Un lenguaje declarativo orientado a intención para construir sistemas inteligentes.
+Más formalmente:
+PEX is a declarative, intent-oriented, project-based programming language for AI systems.
+Esto significa que el lenguaje permite describir objetivos y comportamiento esperado, mientras que el runtime decide cómo ejecutarlo usando inteligencia artificial y herramientas.
+2. Modelo mental del lenguaje
+PEX se basa en un modelo diferente al de la programación tradicional.
+Programación tradicional
+input → algoritmo → output
+Modelo PEX
+intención → contexto → razonamiento → resultado
+El programador describe:
+el objetivo
+
+la información disponible
+
+las herramientas que pueden usarse
+
+el resultado esperado
+
+El sistema se encarga de la ejecución.
+3. Unidad fundamental del lenguaje
+En muchos lenguajes la unidad principal es:
+la clase
+
+la función
+
+el objeto
+
+En PEX la unidad principal es:
+la intención
+Esto significa que los programas se organizan alrededor de objetivos.
+Ejemplo conceptual:
+task summarize_article
+   input article.txt
+   goal summarize in five key points
+4. Analogía conceptual
+PEX puede entenderse como dar instrucciones de trabajo a una inteligencia artificial.
+Es similar a asignar tareas a una persona muy capaz:
+Ejemplo humano:
+Investiga las tendencias de IA en educación y escribe un reporte.
+Ejemplo en PEX:
+task research_ai_education
+   topic AI in education
+   goal analyze trends and produce report
+El lenguaje formaliza instrucciones de trabajo para sistemas inteligentes.
+5. Diferencia con prompts
+Un prompt típico:
+Analyze AI trends in education and write a report.
+Problemas:
+no es reutilizable
+
+no es estructurado
+
+no escala bien
+
+no se integra fácilmente con herramientas
+
+PEX introduce estructura programática.
+Ejemplo:
+task research
+   topic AI in education
+   use web_search
+   goal produce report
+6. Diferencia con Python
+Python describe pasos concretos de ejecución.
+Ejemplo:
+data = search_web("AI in education")
+summary = summarize(data)
+write_report(summary)
+PEX describe objetivos y recursos.
+task research
+   topic AI in education
+   use web_search
+   goal generate report
+7. Arquitectura conceptual de ejecución
+PEX funciona mediante un modelo de ejecución en capas.
+PEX code (.pi)
+      ↓
+PEX runtime
+      ↓
+AI reasoning
+      ↓
+tools / MCP / APIs
+      ↓
+result
+PEX describe la intención, mientras que el runtime coordina la ejecución.
+8. Capa de inteligencia del software
+PEX no reemplaza necesariamente el backend tradicional.
+PEX actúa como:
+la capa de inteligencia del software moderno
+Arquitectura típica:
+Frontend
+  ↓
+Backend
+  ↓
+PEX runtime
+  ↓
+IA / herramientas
+PEX se usa para:
+predicción
+
+análisis
+
+generación
+
+investigación
+
+automatización
+
+9. Paradigmas combinados en PEX
+PEX combina ideas de varios paradigmas.
+Declarativo
+Describe resultados deseados.
+Workflow
+Permite organizar procesos complejos.
+Agent-oriented
+Permite sistemas multi-agente.
+Intent-oriented
+La intención es la base del código.
+10. Componentes fundamentales del lenguaje
+El lenguaje se construye sobre las siguientes estructuras principales:
+project
+task
+agent
+pipeline
+tool
+memory
+model
+Estas piezas permiten describir sistemas inteligentes completos.
+11. Ejemplo conceptual de proyecto PEX
+project sales_ai
+
+agent analyst
+   goal analyze sales trends
+
+agent predictor
+   goal forecast future sales
+
+pipeline monthly_analysis
+   step analyst
+   step predictor
+Este proyecto describe un sistema de análisis predictivo.
+12. Analogía con lenguajes de descripción
+PEX tiene similitudes conceptuales con lenguajes como los usados para describir hardware.
+En lugar de describir pasos computacionales, describe comportamiento inteligente esperado.
+Podemos resumirlo así:
+Python programa algoritmos
+
+SQL consulta datos
+
+HDL describe hardware
+
+PEX describe comportamiento inteligente
+
+13. Regla conceptual del lenguaje
+Una regla útil de diseño es:
+Si una instrucción no se la dirías a una persona inteligente, probablemente no pertenece a PEX.
+Esto mantiene el lenguaje enfocado en objetivos claros.
+14. Principio central
+La idea principal que define PEX es:
+PEX programs intention, not implementation.
+El desarrollador describe qué quiere lograr.
+ El sistema decide cómo hacerlo.
+Zen of PEX
+1. Intention over implementation.
+ La intención es más importante que la implementación.
+2. Clarity over complexity.
+ La claridad siempre debe ganar a la complejidad.
+3. Structure over prompts.
+ La estructura es mejor que prompts ambiguos.
+4. Describe the goal, not every step.
+ Describe el objetivo, no cada paso.
+5. Intelligence is part of the runtime.
+ La inteligencia es parte del sistema, no una librería.
+6. Context matters.
+ El contexto es parte esencial del programa.
+7. Simple tasks should be trivial.
+ Las tareas simples deben ser extremadamente fáciles.
+8. Systems should compose naturally.
+ Los sistemas deben poder componerse naturalmente.
+9. Tools extend intelligence.
+ Las herramientas amplían la inteligencia.
+10. Projects describe intelligent systems.
+ Los proyectos describen sistemas inteligentes.
+11. Readability guides design.
+ La legibilidad guía el diseño.
+12. Humans describe. Intelligence executes.
+ Los humanos describen. La inteligencia ejecuta.
+
+Versión corta (tipo mantra)
+Podríamos incluso resumirlo en algo más corto:
+PEX programs intention, not implementation.
+2. El único ajuste importante que haría
+El ajuste es cómo posicionamos PEX.
+Antes lo planteamos como:
+lenguaje para workflows de IA
+Eso puede sonar limitado.
+La versión mejor sería:
+PEX es un lenguaje para construir sistemas inteligentes dentro del software moderno.
+Eso incluye:
+predicción
+
+análisis
+
+generación
+
+agentes
+
+copilotos
+
+automatización
+
+investigación
+
+reasoning
+
+No solo pipelines.
+
+3. El cambio conceptual que lo vuelve más fuerte
+Esta es la idea que salió hoy y que me parece excelente mantener:
+C controla hardware.
+ PEX controla inteligencia.
+Eso le da una identidad clarísima al lenguaje.
+Entonces podríamos dejar la definición oficial así:
+Definición de PEX
+PEX is a cognitive programming language designed to extract the full capability of intelligent systems.
+O más corto:
+PEX programs intelligence.
+3. El cambio conceptual que lo vuelve más fuerte
+Esta es la idea que salió hoy y que me parece excelente mantener:
+C controla hardware.
+ PEX controla inteligencia.
+Eso le da una identidad clarísima al lenguaje.
+Entonces podríamos dejar la definición oficial así:
+Definición de PEX
+PEX is a cognitive programming language designed to extract the full capability of intelligent systems.
+O más corto:
+PEX programs intelligence.
+
+4. Lo que NO cambiaría
+No cambiaría estas decisiones:
+No hacerlo orientado a objetos
+Eso fue correcto.
+OO no encaja naturalmente con IA.
+
+No hacerlo lenguaje de UI
+También correcto.
+PEX no debería competir con:
+React
+
+Flutter
+
+SwiftUI
+
+PEX vive detrás del software.
+
+Hacerlo interoperable
+También fue buena idea permitir:
+Python
+
+APIs
+
+tools
+
+MCP
+
+modelos
+
+Eso evita que quede limitado.
+
+5. Cómo queda PEX después del ajuste
+Entonces ahora PEX queda así:
+Identidad
+Lenguaje para programar inteligencia.
+
+Paradigma
+Intent-Oriented Programming.
+
+Unidades del lenguaje
+project
+task
+agent
+pipeline
+tool
+model
+memory
+
+Posición en software
+Frontend
+Backend
+PEX
+IA + herramientas
+PEX es la capa cognitiva.
+
+6. Veredicto honesto
+Si alguien me mostrara este diseño en un documento técnico, yo diría:
+✔ tiene identidad
+ ✔ tiene propósito
+ ✔ no intenta hacer todo
+ ✔ tiene filosofía clara
+ ✔ tiene analogía fuerte (C vs inteligencia)
+Eso es mucho mejor que el 90% de ideas de lenguajes nuevos.
+
+7. Lo importante ahora
+El siguiente paso ya no es filosofía.
+Ahora toca ingeniería del lenguaje.
+Día 3 debería responder:
+cómo se ejecuta .pi
+
+cómo funciona el runtime
+
+cómo se parsea el lenguaje
+
+cómo se integran modelos
+
+cómo se ejecuta pex run
+
+Eso ya es arquitectura real.
+
+Te dejo una pregunta clave antes de empezar Día 3
+Hay una decisión importante que cambia todo el diseño:
+PEX debería ser principalmente:
+A) interpretado (tipo Python)
+ B) compilado a otro lenguaje (ej: Python / JS)
+ C) un planner que genera planes de ejecución para IA
+Mi recomendación sería A + C combinados, pero podemos decidirlo juntos antes de diseñar el runtime.
+tambien me parece no sabia que podia combinarlos pero siento que debe ser algo como a y C
+Sí, y de hecho A + C me parece la mejor decisión para PEX.
+No solo es posible combinarlos: para este lenguaje casi es lo correcto.
+Qué significaría A + C
+A) Interpretado
+PEX se lee y se ejecuta como un lenguaje tipo Python.
+Eso te da:
+desarrollo rápido
+
+facilidad para probar ideas
+
+sintaxis viva y flexible
+
+mejor experiencia al inicio
+
+Ejemplo:
+pex run forecast.pi
+El runtime lee el archivo, interpreta su estructura y lo ejecuta.
+C) Planner de ejecución inteligente
+Antes de ejecutar, PEX no corre directamente cada línea como Python clásico.
+ Primero construye un plan.
+O sea:
+codigo .pi
+  ↓
+parser
+  ↓
+modelo interno del proyecto
+  ↓
+planner
+  ↓
+plan de ejecución
+  ↓
+runtime
+  ↓
+IA + tools + resultados
+Eso hace que PEX no sea solo “un intérprete”, sino un sistema que:
+entiende la intención
+
+descompone objetivos
+
+decide recursos
+
+coordina agentes y tools
+
+ejecuta con criterio
+
+Y eso encaja perfecto con la filosofía del lenguaje.
+
+Por qué esta combinación es tan buena
+Porque PEX no está programando solo instrucciones lineales.
+Está programando cosas como:
+analizar
+
+predecir
+
+investigar
+
+generar
+
+coordinar agentes
+
+usar herramientas
+
+razonar con contexto
+
+Eso necesita dos cosas al mismo tiempo:
+1. Un intérprete
+Para leer el lenguaje y mantener una experiencia simple.
+2. Un planner
+Para traducir intención en acciones ejecutables.
+Si haces solo A, PEX se parecería demasiado a un scripting language bonito.
+Si haces solo C, PEX podría sentirse demasiado abstracto o demasiado dependiente de un motor oculto.
+A + C lo equilibra.
+
+Cómo quedaría la definición técnica
+Podríamos decir:
+PEX is an interpreted cognitive programming language with an intelligent execution planner.
+En español:
+PEX es un lenguaje cognitivo interpretado con un planificador inteligente de ejecución.
+Eso suena bastante sólido.
+
+Cómo funcionaría internamente
+Fase 1: parseo
+Leer .pi y construir una representación estructurada.
+Ejemplo:
+project sales_ai
+
+task forecast
+   input sales_data
+   goal predict next month revenue
+Se convierte en algo como:
+Project
+ name: sales_ai
+ tasks:
+   - forecast
+     input: sales_data
+     goal: predict next month revenue
+Fase 2: planificación
+El planner analiza el proyecto y decide:
+qué modelo usar
+
+qué tools necesita
+
+si divide la tarea en pasos
+
+si requiere validación
+
+cómo manejar contexto
+
+qué orden de ejecución conviene
+
+Ejemplo conceptual:
+Plan for task forecast:
+1. Load sales_data
+2. Validate schema
+3. Select prediction-capable model
+4. Run forecasting
+5. Generate explanation
+6. Return forecast + confidence
+Fase 3: ejecución
+El runtime ejecuta el plan:
+llama modelos
+
+usa tools
+
+compone resultados
+
+maneja memoria y contexto
+
+Fase 4: salida
+Entrega resultado estructurado al usuario, backend o app.
+
+Qué ventaja le da esto a PEX frente a Python
+Python normalmente hace esto:
+tú defines la lógica
+
+tú decides el flujo
+
+tú integras todo manualmente
+
+PEX haría esto:
+tú defines el objetivo
+
+el planner resuelve la estrategia
+
+el runtime ejecuta con IA y herramientas
+
+Eso es exactamente la identidad que queremos.
+
+Qué decisión importante sale de aquí
+PEX no debería interpretarse línea por línea como un lenguaje tradicional puro.
+Más bien debería interpretarse por bloques semánticos.
+Por ejemplo:
+task
+
+agent
+
+pipeline
+
+tool
+
+project
+
+Cada bloque no es una instrucción simple: es una unidad semántica de ejecución.
+Eso es importantísimo.
+
+Entonces el modelo oficial podría ser este
+PEX tiene dos motores
+1. Semantic Interpreter
+Entiende el código .pi.
+2. Execution Planner
+Convierte intención en un plan ejecutable.
+Luego ambos alimentan al:
+3. Runtime Engine
+Que usa IA, herramientas, memoria y contexto.
+
+Arquitectura v0.1 propuesta
+.pi source
+  ↓
+Lexer / Parser
+  ↓
+AST
+  ↓
+Semantic Interpreter
+  ↓
+Execution Planner
+  ↓
+Runtime Engine
+  ├── models
+  ├── tools
+  ├── memory
+  └── connectors
+  ↓
+result
+
+Esto también resuelve algo importante
+Con A + C, PEX puede tener dos modos:
+Modo directo
+Para tareas simples.
+task hello
+   goal say hello
+El planner hace casi nada y ejecuta rápido.
+Modo cognitivo
+Para tareas complejas.
+project startup_ai
+
+agent researcher
+   goal analyze market trends
+
+agent predictor
+   goal estimate demand
+
+pipeline launch_plan
+   step researcher
+   step predictor
+Aquí el planner sí construye una estrategia más rica.
+Eso hace al lenguaje escalable.
+
+Mi veredicto
+Sí: PEX debería ser interpretado con planner.
+Eso lo hace:
+simple para usar
+
+potente para IA
+
+diferente de Python
+
+coherente con su filosofía
+
+extensible en el futuro
+
+Y además conecta perfecto con tu intuición de que PEX debe “sacarle el jugo a la inteligencia”.
+
+Qué cambia en Día 1 y Día 2
+No hay que rehacerlos. Solo ajustar una cosa en la formulación técnica:
+Antes:
+PEX es un lenguaje declarativo orientado a intención.
+Ahora:
+PEX es un lenguaje declarativo orientado a intención, interpretado por semántica y ejecutado mediante un planner inteligente.
+Eso fortalece muchísimo lo ya construido.
+
+Resumen corto de la decisión
+PEX no ejecuta instrucciones; interpreta intención y planifica ejecución.
+Esa frase ya nos sirve como base para el Día 3.
+El siguiente paso natural es que definamos el runtime oficial de PEX v0.1:
+ parser, AST, planner, runtime, tools, models y comandos como pex run.
+

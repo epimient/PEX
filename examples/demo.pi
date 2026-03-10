@@ -1,0 +1,66 @@
+# ═══════════════════════════════════════════════════
+# PEX Demo — Ejemplo completo del lenguaje PEX v0.1
+# Sistema de análisis predictivo de ventas
+# ═══════════════════════════════════════════════════
+
+# ── Variables globales ──
+region = "latam"
+period = "last_12_months"
+debug = true
+
+# ── Modelos de IA ──
+model analyst
+   provider openai
+   name gpt-4
+
+# ── Herramientas externas ──
+tool sales_db
+   provider postgres
+   source $SALES_DB_URL
+
+tool web_search
+   provider web
+
+# ── Memoria contextual ──
+memory session_context
+   scope session
+
+# ── Estructura de datos ──
+record Forecast
+   revenue
+   confidence
+   explanation
+
+# ── Tareas ──
+task analyze_sales
+   input sales_db
+   context region
+   context period
+   model analyst
+   goal identify trends in monthly sales data
+   output trends
+
+task predict_sales
+   input trends
+   model analyst
+   goal predict next month revenue with confidence score
+   output forecast
+
+task generate_report
+   input trends
+   input forecast
+   use web_search
+   goal generate executive summary report with charts
+   output report
+
+# ── Agente inteligente ──
+agent market_researcher
+   model analyst
+   use web_search
+   goal investigate current market conditions in the region
+
+# ── Pipeline principal ──
+pipeline monthly_analysis
+   step analyze_sales
+   step predict_sales
+   step generate_report

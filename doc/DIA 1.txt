@@ -1,0 +1,254 @@
+📜 Manifiesto corto de PEX
+Podemos empezar con algo así:
+PEX is a programming language designed for the age of artificial intelligence.
+Instead of telling machines how to execute instructions, PEX lets developers describe intentions, context, and outcomes.
+Write intent. Let intelligence execute.
+PEX — Manifiesto del Lenguaje
+Introducción
+PEX es un lenguaje de programación diseñado para la era de la inteligencia artificial.
+Durante décadas, los lenguajes de programación fueron creados para controlar máquinas mediante instrucciones precisas y deterministas. Estos lenguajes reflejan un paradigma en el que la computadora ejecuta exactamente lo que se le indica, paso por paso.
+Sin embargo, la aparición de sistemas de inteligencia artificial capaces de razonar, interpretar lenguaje natural y generar soluciones ha cambiado la naturaleza de la programación.
+PEX nace para este nuevo contexto.
+PEX no fue diseñado para programar computadoras tradicionales.
+ PEX fue diseñado para colaborar con inteligencias artificiales.
+En lugar de describir cada paso de un algoritmo, el programador describe intenciones, objetivos y contexto, y el sistema de ejecución se encarga de transformar esas intenciones en acciones concretas.
+PEX es un lenguaje donde la programación se acerca más a expresar pensamiento estructurado que a escribir instrucciones mecánicas.
+
+Propósito del lenguaje
+El objetivo principal de PEX es proporcionar una forma clara, simple y estructurada de programar sistemas basados en inteligencia artificial.
+PEX busca:
+Reducir la complejidad innecesaria del código.
+
+Permitir expresar intención en lugar de implementación.
+
+Integrar modelos de IA como parte fundamental del lenguaje.
+
+Facilitar la creación de agentes, pipelines y sistemas de razonamiento.
+
+Mantener una sintaxis limpia, inspirada en la simplicidad de Python.
+
+PEX pretende convertirse en un lenguaje donde el desarrollador pueda concentrarse en qué quiere lograr, mientras el sistema gestiona cómo lograrlo.
+
+Filosofía del lenguaje
+La filosofía de PEX se basa en cinco ideas fundamentales.
+1. La intención es el núcleo del programa
+En los lenguajes tradicionales, el programador describe cada paso del proceso.
+En PEX, el programador describe el objetivo del proceso.
+Ejemplo conceptual:
+En lugar de escribir:
+llamar API
+procesar texto
+generar resumen
+En PEX se escribe:
+task summary
+   input article.txt
+   goal summarize in 5 points
+La intención del programa es clara y directa.
+
+2. Menos sintaxis, más significado
+PEX evita la complejidad sintáctica innecesaria.
+El lenguaje reduce al mínimo:
+símbolos
+
+paréntesis obligatorios
+
+estructuras ceremoniales
+
+El código debe ser legible casi como una instrucción humana.
+Ejemplo:
+task research
+   topic artificial intelligence trends
+   goal find key insights
+La estructura es simple y semántica.
+
+3. La inteligencia es parte del lenguaje
+En la mayoría de los lenguajes actuales, la inteligencia artificial se utiliza mediante bibliotecas o APIs externas.
+PEX adopta un enfoque diferente:
+La inteligencia artificial es parte del runtime del lenguaje.
+El lenguaje está diseñado para que los modelos de IA participen directamente en la ejecución del programa.
+Esto permite que PEX trate conceptos como:
+razonamiento
+
+interpretación
+
+generación
+
+análisis
+
+como operaciones naturales del lenguaje.
+
+4. El código debe ser legible como pensamiento estructurado
+PEX busca que los programas se parezcan más a un flujo de pensamiento organizado que a una secuencia mecánica de instrucciones.
+Un programa PEX describe:
+objetivos
+
+contexto
+
+información
+
+transformaciones
+
+Ejemplo:
+pipeline research_project
+
+   step search
+       goal find reliable sources about AI trends
+
+   step summarize
+       goal extract key insights
+
+   step report
+       goal generate a concise report
+El programa refleja claramente el proceso intelectual que se desea ejecutar.
+
+5. Lo simple debe ser fácil, lo complejo debe ser posible
+PEX está diseñado para que las tareas más comunes se puedan expresar con muy poco código.
+Pero también debe permitir construir sistemas más avanzados como:
+agentes autónomos
+
+sistemas multi-modelo
+
+pipelines de análisis
+
+herramientas inteligentes
+
+PEX busca equilibrio entre simplicidad y capacidad.
+
+Principios de diseño
+PEX se construye bajo los siguientes principios de diseño.
+Claridad
+El código debe ser fácil de leer y entender.
+Minimalismo
+La sintaxis debe ser mínima y consistente.
+Expresividad
+El lenguaje debe permitir expresar ideas complejas de forma clara.
+Composición
+Las estructuras del lenguaje deben poder combinarse para formar sistemas mayores.
+Orientación a intención
+El lenguaje se centra en objetivos y resultados.
+
+Estructura general del lenguaje
+PEX se basa en varias estructuras principales.
+Entre ellas:
+task
+
+pipeline
+
+agent
+
+memory
+
+tool
+
+Estas estructuras permiten modelar diferentes tipos de procesos basados en inteligencia artificial.
+Task
+Representa una acción o intención específica.
+Ejemplo:
+task summary
+   input article.txt
+   goal summarize the text in 5 points
+
+Pipeline
+Permite encadenar múltiples tareas.
+Ejemplo:
+pipeline research
+
+   step gather
+       goal collect information about AI startups
+
+   step analyze
+       goal identify main trends
+
+   step report
+       goal write a brief summary
+
+Agent
+Representa una entidad capaz de tomar decisiones y ejecutar tareas.
+Ejemplo:
+agent researcher
+   goal investigate market trends in AI
+
+Sintaxis del lenguaje
+PEX adopta una sintaxis inspirada en Python:
+bloques definidos por indentación
+
+pocas palabras clave
+
+ausencia de símbolos innecesarios
+
+estructura jerárquica clara
+
+Ejemplo básico:
+task hello
+   goal say hello to the world
+La estructura del lenguaje favorece la claridad sobre la complejidad.
+
+Extensión de archivos
+Los programas escritos en PEX utilizan la extensión:
+.pi
+Ejemplos:
+hello.pi
+analysis.pi
+research.pi
+agent.pi
+La extensión .pi representa:
+simplicidad matemática
+
+precisión computacional
+
+una referencia simbólica al origen del lenguaje en Pimienta.
+
+
+Arquitectura técnica del lenguaje
+PEX será construido como un lenguaje interpretado inicialmente.
+La arquitectura básica del sistema será:
+archivo .pi
+     ↓
+parser
+     ↓
+AST (árbol sintáctico)
+     ↓
+runtime PEX
+     ↓
+ejecución con IA y herramientas
+Los componentes principales serán:
+Parser
+Lee el código .pi y lo convierte en una estructura interna.
+AST
+Representación estructurada del programa.
+Runtime
+Sistema encargado de ejecutar las tareas descritas en el programa.
+Integración con IA
+El runtime gestiona llamadas a modelos de lenguaje y herramientas externas.
+
+Evolución del lenguaje
+PEX se desarrollará progresivamente en varias etapas.
+Fase 1
+Diseño del lenguaje y sintaxis base.
+Fase 2
+Construcción del parser y runtime inicial.
+Fase 3
+Integración con modelos de IA.
+Fase 4
+Sistema de agentes y herramientas.
+Fase 5
+Ecosistema de librerías y extensiones.
+
+Identidad del lenguaje
+PEX es un lenguaje que representa:
+creatividad
+
+simplicidad
+
+inteligencia aplicada
+
+pensamiento estructurado
+
+PEX busca ser un puente entre programación tradicional y sistemas cognitivos basados en IA.
+
+Declaración final
+PEX nace con la intención de redefinir cómo interactuamos con las computadoras inteligentes.
+Donde antes escribíamos instrucciones detalladas, ahora escribiremos intenciones claras.
+PEX no es solo un lenguaje de programación.
+Es un intento de acercar la programación al proceso natural de pensamiento humano, permitiendo que las máquinas inteligentes colaboren activamente en la construcción de soluciones.
+

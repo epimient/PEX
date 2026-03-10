@@ -1,0 +1,6 @@
+# ═══════════════════════════════════════
+# PEX — Ejemplo mínimo: Hola Mundo
+# ═══════════════════════════════════════
+
+task hello
+   goal say hello to the world and introduce PEX

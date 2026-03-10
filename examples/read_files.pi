@@ -1,0 +1,53 @@
+# Prueba PEX v0.1: Lectura de Archivos (FileAdapter)
+
+project file_test
+
+# 1. Configurar Tools de Archivos
+tool csv_data
+   provider csv
+   source examples/data.csv
+
+tool json_data
+   provider json
+   source examples/data.json
+
+tool txt_data
+   provider txt
+   source examples/data.txt
+
+# 2. Configurar Modelo de Lenguaje para resumir
+model ai_assistant
+   provider openai
+   name gpt-3.5-turbo
+
+# 3. Tareas: Cargar cada archivo
+task load_csv
+   input csv_data
+   query load all rows
+   output data_from_csv
+
+task load_json
+   input json_data
+   query load config object
+   output data_from_json
+
+task load_txt
+   input txt_data
+   query read plain text
+   output data_from_txt
+
+# 4. Tarea: Consolidar y analizar
+task analyze_files
+   input data_from_csv
+   input data_from_json
+   input data_from_txt
+   model ai_assistant
+   goal Eres un asistente útil. Acabas de recibir datos de tres fuentes (CSV, JSON y TXT). Resúmelos en un párrafo indicando qué información clave viste en cada uno.
+   output final_analysis
+
+# 5. Ejecutar pipeline
+pipeline run_file_test
+   step load_csv
+   step load_json
+   step load_txt
+   step analyze_files

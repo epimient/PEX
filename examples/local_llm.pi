@@ -1,0 +1,35 @@
+# Prueba PEX v0.1: Usando un modelo local (Ollama)
+
+project local_ai_test
+
+# 1. Configurar Modelo de Lenguaje Local
+model local_analyst
+   provider ollama
+   name llama3
+
+# 2. Configurar Tool extra de contexto (BD creada antes)
+tool my_database
+   provider sqlite
+   source examples/test_sales.db
+
+# 3. Tarea 1: Consulta SQL
+task extract_data
+   input my_database
+   sql """
+       SELECT product, revenue 
+       FROM sales 
+   """
+   goal extract raw data
+   output raw_data
+
+# 4. Tarea 2: Enviar a Ollama Local
+task summarize_data
+   input raw_data
+   model local_analyst
+   goal Eres una IA corriendo localmente. Tu objetivo es resumir qué productos aparecen en el set de datos entregado. Redacta la respuesta en 2-3 viñetas breves.
+   output local_summary
+
+# 5. Ejecutar pipeline
+pipeline run_local_test
+   step extract_data
+   step summarize_data
