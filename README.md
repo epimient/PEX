@@ -1,44 +1,245 @@
 # PEX Language
 
-PEX (*Programs intention, not implementation*) es un lenguaje de programación cognitivo diseñado para la era de la inteligencia artificial.
+> **Programs intention, not implementation**
 
-## Filosofía
+PEX es un lenguaje de programación **cognitivo y declarativo** diseñado para la era de la inteligencia artificial. En lugar de escribir algoritmos paso a paso, describes **intenciones, contexto y resultados esperados**, y el runtime de PEX se encarga de la ejecución.
 
-Durante décadas, los lenguajes de programación fueron creados para controlar máquinas mediante instrucciones precisas y deterministas. PEX nace para un nuevo contexto: **colaborar con inteligencias artificiales**.
+## ¿Por qué PEX?
 
-En lugar de describir cada paso de un algoritmo, en PEX el programador describe:
-- **Intenciones** (`task`, `agent`, `pipeline`)
-- **Contexto** (`memory`, `variables`, `context`)
-- **Recursos** (`tool`, `model`)
-- **Estructura de Datos** (`record`, `entity`)
+### El Problema
 
-## Sintaxis v0.4 (Tipos, Caché, MCP, Linter)
+Los lenguajes tradicionales (Python, Java, etc.) fueron diseñados para **controlar máquinas** mediante instrucciones precisas:
 
-PEX utiliza una sintaxis limpia, mínima y basada en indentación. Los archivos usan la extensión `.pi`.
+```python
+# Enfoque tradicional (Python)
+def analyze_sales(data):
+    result = []
+    for row in data:
+        if row['revenue'] > 10000:
+            result.append(process(row))
+    return summarize(result)
+```
 
-### Novedades en v0.4:
-- **Sistema de Tipos**: Annotations opcionales para records y entities (`field : type`)
-- **Caché Integrada**: Memory blocks con TTL para cacheo automático de resultados
-- **Integración MCP**: Soporte para Model Context Protocol (tools, resources, prompts, LLMs)
-- **Linter Estático**: Análisis de código con `pex lint` (variables no usadas, naming conventions, etc.)
-- **Imports Relativos**: Soporte para `../modules/foo` y paths con strings
+### La Solución PEX
 
-### Ejemplo: Tipos en Records
+PEX fue diseñado para **colaborar con inteligencias artificiales**:
+
+```pex
+# Enfoque PEX
+task analyze_sales
+    input sales_data
+    model analyst
+    goal identify high-value transactions and summarize trends
+    output analysis
+```
+
+**Beneficios:**
+- ✅ **Menos código** — Enfócate en el qué, no en el cómo
+- ✅ **IA integrada** — Modelos de lenguaje como parte del runtime
+- ✅ **Orquestación simple** — Pipelines que conectan tareas, agentes y herramientas
+- ✅ **Legible** — Sintaxis limpia que cualquier stakeholder puede entender
+
+---
+
+## Casos de Uso
+
+### 1. Análisis de Datos con IA
+
+```pex
+project sales_analysis
+
+model analyst
+    provider openai
+    name gpt-4
+
+tool database
+    provider postgres
+    source $DATABASE_URL
+
+task get_quarterly_sales
+    input database
+    sql """
+        SELECT quarter, SUM(revenue) as total
+        FROM sales
+        WHERE year = 2025
+        GROUP BY quarter
+    """
+    output quarterly_data
+
+task analyze_trends
+    input quarterly_data
+    model analyst
+    goal identify growth patterns and predict next quarter performance
+    output forecast
+
+pipeline quarterly_report
+    step get_quarterly_sales
+    step analyze_trends
+```
+
+### 2. Agentes Autónomos
+
+```pex
+agent market_researcher
+    model strategist
+    use web_search
+    use company_docs
+    goal research competitor pricing and market positioning
+    output market_analysis
+```
+
+### 3. Pipelines de Procesamiento
+
+```pex
+pipeline content_creation
+    step research_topic      # Recopila información
+    step analyze_findings    # Analiza con IA
+    step generate_draft      # Escribe borrador
+    step review_and_edit     # Revisa y mejora
+```
+
+---
+
+## Empezando Rápido
+
+### Instalación
+
+```bash
+# Clonar o descargar PEX
+cd PEX
+
+# (Opcional) Crear entorno virtual
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+
+# (Opcional) Instalar dependencias para IA
+pip install openai psycopg2-binary requests
+```
+
+### Tu Primer Programa
+
+Crea `hello.pi`:
+
+```pex
+task hello
+    goal say hello to the world and introduce PEX
+```
+
+Ejecuta:
+
+```bash
+python main.py run hello.pi
+```
+
+### Configuración
+
+Crea un archivo `.env` para credenciales:
+
+```bash
+OPENAI_API_KEY=sk-xxxxx
+OPENAI_MODEL=gpt-4
+DATABASE_URL=postgres://localhost:5432/mydb
+```
+
+---
+
+## Conceptos Clave
+
+### Tasks (Tareas)
+Unidades básicas de trabajo. Describen **qué** quieres lograr.
+
+```pex
+task summarize_document
+    input document_text
+    model analyst
+    goal create a 5-bullet summary of key points
+    output summary
+```
+
+### Agents (Agentes)
+Entidades inteligentes con autonomía para lograr objetivos.
+
+```pex
+agent data_scientist
+    model analyst
+    use pandas_tool
+    use visualization_lib
+    goal analyze dataset and generate insights
+```
+
+### Pipelines
+Orquestan tareas y agentes en secuencia.
+
+```pex
+pipeline analysis_workflow
+    step load_data
+    step clean_data
+    step analyze_patterns
+    step generate_report
+```
+
+### Tools (Herramientas)
+Conexiones a recursos externos (BDs, APIs, archivos).
+
+```pex
+tool sales_db
+    provider postgres
+    source $DATABASE_URL
+
+tool web_search
+    provider web
+
+tool local_files
+    provider csv
+    source "data/sales.csv"
+```
+
+### Models (Modelos de IA)
+Configuración de acceso a modelos de lenguaje.
+
+```pex
+model analyst
+    provider openai
+    name gpt-4
+
+model local_model
+    provider ollama
+    name llama3
+```
+
+---
+
+## Características Avanzadas
+
+### Tipos en Estructuras (Opcional)
+
 ```pex
 record Forecast
     revenue : float
     confidence : int
     explanation : string
+
+entity Customer
+    table customers
+    field id : int
+    field email : string
+    field created_at : string
 ```
 
-### Ejemplo: Caché con TTL
+### Caché de Resultados
+
 ```pex
 memory session_cache
     scope session
     ttl 60  # segundos
+
+# Las tareas con memoria cachean automáticamente sus resultados
 ```
 
-### Ejemplo: MCP Integration
+### Integración MCP
+
+Conecta con servidores MCP (Model Context Protocol) para tools y recursos externos:
+
 ```pex
 tool web_search
     provider mcp
@@ -49,115 +250,98 @@ model local_ai
     name llama3
 ```
 
-### Ejemplo: Arquitectura Multi-Archivo
-`database.pi`
-```pex
-tool sales_db
-    provider "postgres"
-    source $SALES_DB_URL
-```
+### Análisis Estático
 
-`main.pi`
-```pex
-project Analytics
-    import database # Carga definiciones de database.pi
-
-# Variables Globales
-region = "latam"
-
-# Definición de Modelos
-model analyst
-    provider "openai"
-    name "gpt-4"
-
-# Tarea con lógica de IA
-task predictor
-    input products_data
-    model analyst
-    goal "Predict seasonal sales trends based on input"
-    output forecast_report
-
-# Pipeline: Orquestación de pasos
-pipeline annual_forecast
-    step fetchData
-    step predictor
-```
-
-## Arquitectura del Intérprete
-
-La versión 0.4 consolida la arquitectura en capas para garantizar robustez:
-
-1.  **Lexer & Parser**: Procesan el código fuente. El lexer maneja indentación (estilo Python), bloques de texto libre, y annotations de tipos (`:`).
-2.  **Registry & Symbol Table**: Centraliza todas las definiciones. Implementa **detección de colisiones** y almacena información de tipos.
-3.  **Execution Planner**: La "mente" del compilador. Resuelve imports recursivos (incluyendo relativos `../`), valida referencias, y genera un `ExecutionPlan` validado.
-4.  **Cache**: Sistema de caché en memoria con TTL para resultados de ejecución.
-5.  **Runtime**: Motor de ejecución. Traduce el plan en acciones. Soporta modos "check", "run", "dry-run", y caché automático.
-6.  **Linter**: Análisis estático opcional para detectar problemas comunes y sugerir mejoras.
-
-## Uso del Intérprete (CLI)
-
-### Instalación
-Asegúrate de tener Python 3.10+ instalado. No requiere dependencias externas para la ejecución básica.
-
-### Comandos Principales
-
-#### 1. Mostrar el AST (Jerárquico o JSON)
 ```bash
-python3 main.py ast path/to/file.pi
-# O con banderas
-python3 main.py ast path/to/file.pi --json --full
+# Verifica tu código en busca de problemas
+python main.py lint program.pi --verbose
 ```
-
-#### 2. Visualizar el plan de ejecución
-```bash
-python3 main.py plan path/to/file.pi
-# O modo detallado para depuración
-python3 main.py plan path/to/file.pi --verbose
-```
-
-#### 3. Verificar integridad semántica
-```bash
-python3 main.py check path/to/file.pi
-```
-
-#### 4. Ejecutar programa
-```bash
-python3 main.py run path/to/file.pi
-# Modo simulación (sin llamar adapters reales)
-python3 main.py run path/to/file.pi --dry-run
-```
-
-#### 5. Analizar código estáticamente (NUEVO en v0.4)
-```bash
-python3 main.py lint path/to/file.pi
-# Con warnings e info
-python3 main.py lint path/to/file.pi --verbose
-```
-
-#### 6. Mostrar versión
-```bash
-python3 main.py version
-```
-
-## Estructura del Código
-- `pex/lexer.py`: Motor léxico con soporte `"""` y type annotations (`:`).
-- `pex/ast_nodes.py`: Nodos del AST con tipos `ValueNode`/`TextNode`, `RecordField`, `EntityField`.
-- `pex/ast_utils.py`: Visualización y serialización del AST.
-- `pex/parser.py`: Parser estricto sincronizado con el AST.
-- `pex/registry.py`: Gestión de símbolos, errores semánticos y tipos.
-- `pex/planner.py`: Resolución de dependencias, imports (absolutos y relativos).
-- `pex/cache.py`: Sistema de caché con TTL (NUEVO en v0.4).
-- `pex/linter.py`: Análisis estático de código (NUEVO en v0.4).
-- `pex/runtime.py`: Orquestador de la ejecución con caché automático.
-- `pex/adapters/`: Adapters para LLMs, BDs, Files y **MCP** (NUEVO en v0.4).
-
-## Métricas del Proyecto (v0.4)
-
-- **172 tests** automatizados
-- **~4400 líneas** de código Python
-- **10 adapters** disponibles (OpenAI, Ollama, SQLite, Postgres, MCP, etc.)
-- **6 comandos CLI** (ast, plan, check, run, lint, version)
-- **15+ reglas** de linter
 
 ---
+
+## Comandos CLI
+
+| Comando | Descripción |
+|---------|-------------|
+| `run` | Ejecutar programa |
+| `check` | Verificar sintaxis |
+| `plan` | Mostrar plan de ejecución |
+| `ast` | Mostrar estructura del AST |
+| `lint` | Analizar código estáticamente |
+| `version` | Mostrar versión |
+
+### Ejemplos
+
+```bash
+# Ejecutar
+python main.py run program.pi
+
+# Modo simulación (sin llamar APIs reales)
+python main.py run program.pi --dry-run
+
+# Verificar
+python main.py check program.pi
+
+# Analizar
+python main.py lint program.pi --verbose
+```
+
+---
+
+## Estructura del Proyecto
+
+```
+PEX/
+├── main.py              # Punto de entrada
+├── pex/                 # Núcleo del lenguaje
+│   ├── lexer.py         # Tokenización
+│   ├── parser.py        # Generación de AST
+│   ├── registry.py      # Tabla de símbolos
+│   ├── planner.py       # Validación semántica
+│   ├── runtime.py       # Motor de ejecución
+│   ├── cache.py         # Sistema de caché
+│   ├── linter.py        # Análisis estático
+│   ├── diagnostics.py   # Sistema de errores
+│   └── adapters/        # Integraciones
+│       ├── llm.py       # OpenAI, Ollama
+│       ├── db.py        # SQLite, PostgreSQL
+│       ├── file.py      # CSV, JSON, TXT
+│       └── mcp.py       # Model Context Protocol
+├── tests/               # Tests automatizados
+├── examples/            # Ejemplos de uso
+└── docs/                # Documentación completa
+```
+
+---
+
+## Estado del Proyecto
+
+**Versión actual:** v0.4.0
+
+| Métrica | Valor |
+|---------|-------|
+| Tests automatizados | 172 |
+| Líneas de código | ~4400 |
+| Adapters disponibles | 10 |
+| Comandos CLI | 6 |
+| Reglas de linter | 15+ |
+
+### Roadmap
+
+- [ ] v0.5: Validación de tipos en runtime
+- [ ] v0.5: Más reglas de linter
+- [ ] v1.0: Sistema de tipos estable
+- [ ] v1.0: Publicación en PyPI
+
+---
+
+## Recursos
+
+- 📚 [Documentación completa](docs/)
+- 📝 [Ejemplos de uso](examples/)
+- 📋 [Historial de cambios](CHANGELOG.md)
+- 🏗️ [Arquitectura del lenguaje](docs/architecture.md)
+
+---
+
 *PEX v0.4 — Programs intention, not implementation.*
