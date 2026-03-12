@@ -1,0 +1,75 @@
+{
+  "name": "pex",
+  "displayName": "PEX Language",
+  "description": "PEX - Programs Intention, Not Implementation. A declarative language for AI-powered workflows",
+  "version": "0.4.0",
+  "publisher": "local",
+  "icon": "./icons/pex-icon.png",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Programming Languages"],
+  "activationEvents": ["onLanguage:pex"],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [{
+      "id": "pex",
+      "aliases": ["PEX", "pex"],
+      "extensions": [".pi"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "pex",
+      "scopeName": "source.pex",
+      "path": "./syntaxes/pex.tmLanguage.json"
+    }],
+    "snippets": [{
+      "language": "pex",
+      "path": "./snippets/pex.json"
+    }],
+    "commands": [
+      {
+        "command": "pex.run",
+        "title": "PEX: Run",
+        "description": "Run the current PEX file"
+      },
+      {
+        "command": "pex.check",
+        "title": "PEX: Check",
+        "description": "Check syntax and semantics of the current PEX file"
+      },
+      {
+        "command": "pex.ast",
+        "title": "PEX: Show AST",
+        "description": "Show Abstract Syntax Tree of the current PEX file"
+      },
+      {
+        "command": "pex.plan",
+        "title": "PEX: Show Plan",
+        "description": "Show execution plan of the current PEX file"
+      },
+      {
+        "command": "pex.lint",
+        "title": "PEX: Lint",
+        "description": "Lint the current PEX file"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "pex.run",
+        "key": "ctrl+shift+r",
+        "when": "editorLangId == pex"
+      },
+      {
+        "command": "pex.check",
+        "key": "ctrl+shift+c",
+        "when": "editorLangId == pex"
+      },
+      {
+        "command": "pex.ast",
+        "key": "ctrl+shift+a",
+        "when": "editorLangId == pex"
+      }
+    ]
+  }
+}

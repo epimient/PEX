@@ -1,0 +1,15 @@
+# ═══════════════════════════════════════════════════
+# PEX Sales Intelligence Demo
+# Demostración de análisis predictivo de ventas
+# ═══════════════════════════════════════════════════
+
+project sales_demo
+    import tools
+    import models
+    import tasks
+    import pipelines
+
+# Variables globales
+region = "latam"
+period = "last_12_months"
+debug = false

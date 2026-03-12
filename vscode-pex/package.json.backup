@@ -1,0 +1,151 @@
+{
+  "name": "pex-language",
+  "displayName": "PEX Language",
+  "description": "Syntax highlighting and snippets for PEX (Programs intention, not implementation)",
+  "version": "0.1.0",
+  "publisher": "eddy",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "__metadata": {
+    "id": "pex-language",
+    "publisherDisplayName": "eddy",
+    "publisherId": "local",
+    "isPreReleaseVersion": false
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "pex",
+        "aliases": ["PEX", "pex"],
+        "extensions": [".pi"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/pex-icon.svg",
+          "dark": "./icons/pex-icon.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pex",
+        "scopeName": "source.pex",
+        "path": "./syntaxes/pex.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "pex",
+        "path": "./snippets/pex.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "pex.run",
+        "title": "PEX: Run File",
+        "category": "PEX"
+      },
+      {
+        "command": "pex.check",
+        "title": "PEX: Check File",
+        "category": "PEX"
+      },
+      {
+        "command": "pex.ast",
+        "title": "PEX: Show AST",
+        "category": "PEX"
+      },
+      {
+        "command": "pex.plan",
+        "title": "PEX: Show Plan",
+        "category": "PEX"
+      },
+      {
+        "command": "pex.lint",
+        "title": "PEX: Lint File",
+        "category": "PEX"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.run",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.check",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.run",
+          "group": "pex"
+        },
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.check",
+          "group": "pex"
+        },
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.ast",
+          "group": "pex"
+        },
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.plan",
+          "group": "pex"
+        },
+        {
+          "when": "resourceLangId == pex",
+          "command": "pex.lint",
+          "group": "pex"
+        }
+      ]
+    }
+  },
+  "activationEvents": [
+    "onLanguage:pex",
+    "onCommand:pex.run",
+    "onCommand:pex.check",
+    "onCommand:pex.ast",
+    "onCommand:pex.plan",
+    "onCommand:pex.lint"
+  ],
+  "main": "./extension.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/glob": "^8.0.0",
+    "@types/node": "16.x",
+    "eslint": "^8.28.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.8.4",
+    "@vscode/test-electron": "^2.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eddy/pex.git"
+  },
+  "keywords": [
+    "pex",
+    "programming language",
+    "AI",
+    "artificial intelligence",
+    "declarative"
+  ],
+  "author": "Eddy",
+  "license": "MIT"
+}

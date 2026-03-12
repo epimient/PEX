@@ -1,0 +1,10 @@
+# Herramientas - Tools
+# Conexiones a bases de datos y archivos
+
+tool sales_db
+    provider sqlite
+    source "examples/sales_demo/data/sales.db"
+
+tool csv_export
+    provider csv
+    source "examples/sales_demo/data/exports"

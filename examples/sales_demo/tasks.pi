@@ -1,0 +1,53 @@
+# Tareas - Tasks
+# Unidades de intención para el análisis de ventas
+
+task load_sales
+    input sales_db
+    sql """
+        SELECT 
+            month,
+            product,
+            region,
+            SUM(revenue) as total_revenue,
+            COUNT(*) as transaction_count
+        FROM sales
+        WHERE region = 'latam'
+        GROUP BY month, product, region
+        ORDER BY month DESC
+    """
+    output sales_data
+
+task analyze_trends
+    input sales_data
+    model analyst
+    goal """
+        Analiza los datos de ventas proporcionados e identifica:
+        1. Tendencias de crecimiento por mes
+        2. Productos más rentables
+        3. Anomalías o patrones inusuales
+        Proporciona un análisis conciso de 3-5 puntos clave.
+    """
+    output trends
+
+task forecast_sales
+    input trends
+    input sales_data
+    model predictor
+    goal """
+        Basándote en las tendencias identificadas y los datos históricos,
+        predice el revenue esperado para el próximo mes.
+        Explica tu razonamiento y proporciona un nivel de confianza (0-100%).
+    """
+    output forecast
+
+task generate_report
+    input trends
+    input forecast
+    goal """
+        Genera un reporte ejecutivo que incluya:
+        - Resumen de tendencias identificadas
+        - Predicción para el próximo mes
+        - Recomendaciones accionables
+        Formato: 2-3 párrafos claros y concisos.
+    """
+    output final_report

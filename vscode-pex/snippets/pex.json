@@ -1,0 +1,94 @@
+{
+  "Task": {
+    "prefix": "task",
+    "body": [
+      "task ${1:name}",
+      "    input ${2:source}",
+      "    goal ${3:describe objective}",
+      "    output ${4:result}"
+    ],
+    "description": "Create a new task block"
+  },
+  "Agent": {
+    "prefix": "agent",
+    "body": [
+      "agent ${1:name}",
+      "    model ${2:model_name}",
+      "    goal ${3:describe objective}",
+      "    output ${4:result}"
+    ],
+    "description": "Create a new agent block"
+  },
+  "Pipeline": {
+    "prefix": "pipeline",
+    "body": [
+      "pipeline ${1:name}",
+      "    step ${2:task_or_agent}",
+      "    step ${3:task_or_agent}"
+    ],
+    "description": "Create a new pipeline block"
+  },
+  "Tool": {
+    "prefix": "tool",
+    "body": [
+      "tool ${1:name}",
+      "    provider ${2:provider}",
+      "    source ${3:source}"
+    ],
+    "description": "Create a new tool block"
+  },
+  "Model": {
+    "prefix": "model",
+    "body": [
+      "model ${1:name}",
+      "    provider ${2:provider}",
+      "    name ${3:model_name}"
+    ],
+    "description": "Create a new model block"
+  },
+  "Memory": {
+    "prefix": "memory",
+    "body": [
+      "memory ${1:name}",
+      "    scope ${2:session|project|persistent}",
+      "    ttl ${3:seconds}"
+    ],
+    "description": "Create a new memory block"
+  },
+  "Record": {
+    "prefix": "record",
+    "body": [
+      "record ${1:name}",
+      "    ${2:field} : ${3:type}",
+      "    ${4:field} : ${5:type}"
+    ],
+    "description": "Create a new record block"
+  },
+  "Entity": {
+    "prefix": "entity",
+    "body": [
+      "entity ${1:name}",
+      "    table ${2:table_name}",
+      "    field ${3:field} : ${4:type}"
+    ],
+    "description": "Create a new entity block"
+  },
+  "Project": {
+    "prefix": "project",
+    "body": [
+      "project ${1:name}",
+      "    import ${2:module}"
+    ],
+    "description": "Create a new project block"
+  },
+  "SQL Multiline": {
+    "prefix": "sql",
+    "body": [
+      "sql \"\"\"",
+      "    ${1:SELECT * FROM table}",
+      "    WHERE ${2:condition}",
+      "\"\"\""
+    ],
+    "description": "Create a multiline SQL block"
+  }
+}

@@ -232,6 +232,8 @@ class Parser:
                             # Extraer valor string si es necesario
                             if expected_type == str and hasattr(val, "value"):
                                 setattr(block, attr, val.value)
+                            elif expected_type == str and hasattr(val, "name"):
+                                setattr(block, attr, val.name)
                             else:
                                 setattr(block, attr, val)
 

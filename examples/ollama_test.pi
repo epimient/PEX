@@ -1,0 +1,20 @@
+# ═══════════════════════════════════════
+# PEX — Ejemplo mínimo con Ollama
+# ═══════════════════════════════════════
+
+project ollama_test
+
+# Configurar Modelo (Ollama local)
+model assistant
+   provider ollama
+   name "llama3:8b"
+
+# Tarea: Usar el LLM para generar texto
+task greet
+   model assistant
+   goal Eres un asistente amigable. Saluda al usuario de forma creativa y dime qué modelos de IA te interesan hoy.
+   output greeting
+
+# Pipeline simple
+pipeline hello
+   step greet

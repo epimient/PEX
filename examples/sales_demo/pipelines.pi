@@ -1,0 +1,12 @@
+# Pipelines
+# Orquestación de tareas para el flujo de análisis
+
+pipeline monthly_analysis
+    step load_sales
+    step analyze_trends
+    step forecast_sales
+    step generate_report
+
+pipeline quick_forecast
+    step load_sales
+    step forecast_sales

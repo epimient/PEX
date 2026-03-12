@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════════
+# PEX — Bot Vendedor de Carros Conversacional
+# Modo interactivo: chatea con el vendedor
+# ═══════════════════════════════════════════════════════════════
+
+project bot_vendedor_conversacional
+
+# ─────────────────────────────────────────────────────────────────
+# MODELO: Ollama con contexto de inventario
+# ─────────────────────────────────────────────────────────────────
+
+model vendedor
+   provider ollama
+   name "llama3:8b"
+
+# ─────────────────────────────────────────────────────────────────
+# HERRAMIENTAS: Inventario de carros
+# ─────────────────────────────────────────────────────────────────
+
+tool inventario
+   provider file
+   source inventario_carros.json
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA: Chat interactivo
+# ─────────────────────────────────────────────────────────────────
+
+task chat_vendedor
+   input inventario
+   model vendedor
+   goal Eres Alex, vendedor de Premium Auto. Tienes acceso al inventario de carros. El cliente te escribirá un mensaje. Responde de forma natural, profesional y amigable. Usa máximo 3 oraciones. Si el cliente pregunta por un auto específico, recommends uno del inventario con precio y características. Pregunta si quiere agendar prueba de manejo.
+   output respuesta
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA: Resumir conversación
+# ─────────────────────────────────────────────────────────────────
+
+task resumir_conversacion
+   model vendedor
+   goal Eres un asistente. El cliente quiere un resumen de lo hablado. Haz un resumen breve de las preferencias del cliente y autos mencionados. Maximum 2 oraciones.
+   output resumen

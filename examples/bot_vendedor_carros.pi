@@ -1,0 +1,95 @@
+# ═══════════════════════════════════════════════════════════════
+# PEX — Bot Vendedor de Carros
+# Un asistente de ventas profesional para concesionario de autos
+# ═══════════════════════════════════════════════════════════════
+
+project bot_vendedor_carros
+
+# ─────────────────────────────────────────────────────────────────
+# CONFIGURACIÓN DEL MODELO
+# ─────────────────────────────────────────────────────────────────
+
+model vendedor_asistente
+   provider ollama
+   name "llama3:8b"
+
+# ─────────────────────────────────────────────────────────────────
+# HERRAMIENTAS (Inventario de carros)
+# ─────────────────────────────────────────────────────────────────
+
+tool inventario_autos
+   provider file
+   source inventario_carros.json
+
+# ─────────────────────────────────────────────────────────────────
+# MEMORIA (Historial de conversación)
+# ─────────────────────────────────────────────────────────────────
+
+memory sesion_venta
+   scope conversation
+   ttl 1800
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA 1: Saludar y capturar necesidades del cliente
+# ─────────────────────────────────────────────────────────────────
+
+task saludar_cliente
+   model vendedor_asistente
+   goal Eres un vendedor de carros profesional y amigable en una concesionaria de lujo. Saluda al cliente de manera cálida y profesional. Pregunta su nombre y qué tipo de auto está buscando. Usa un tono enthusiasm y servicial. Mantén la respuesta breve (máximo 2 oraciones).
+   output saludo_inicial
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA 2: Consultar inventario disponible
+# ─────────────────────────────────────────────────────────────────
+
+task consultar_inventario
+   input inventario_autos
+   model vendedor_asistente
+   goal Eres un asesor de ventas de autos. El cliente busca un auto. Del inventario proporcionado, filtra los autos que coincidan con los criterios mencionados (marca, modelo, presupuesto). Presenta una lista de máximo 3 opciones con: marca, modelo, año, precio, características principales. Sé conciso y profesional.
+   output autos_sugeridos
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA 3: Recomendaciones personalizadas
+# ─────────────────────────────────────────────────────────────────
+
+task generar_recomendacion
+   model vendedor_asistente
+   goal Eres el mejor vendedor de carros de la ciudad. Un cliente mostró interés en opciones específicas. Recomienda LA MEJOR opción explicando por qué es ideal para él. Incluye: precio final, beneficios extras (garantía extendida, mantenimiento gratis), y por qué es la mejor elección. Sé persuasivo pero honesto.
+   output recomendacion_final
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA 4: Generar propuesta comercial
+# ─────────────────────────────────────────────────────────────────
+
+task crear_propuesta
+   model vendedor_asistente
+   goal Eres un profesional de ventas. Genera una propuesta comercial en formato profesional con: 1) Datos del cliente, 2) Auto seleccionado, 3) Precio y formas de pago, 4) Incluir datos de contacto de la concesionaria, 5) Llamado a la acción. Usa formato markdown profesional.
+   output propuesta_comercial
+
+# ─────────────────────────────────────────────────────────────────
+# TAREA 5: Seguimiento y cierre
+# ─────────────────────────────────────────────────────────────────
+
+task seguimiento
+   model vendedor_asistente
+   goal El cliente recibió la propuesta. Genera un mensaje de seguimiento amigable y profesional que: 1) Agradezca el interés, 2) Ofrezca agendar prueba de manejo, 3) Mencione disponibilidad inmediata, 4) Incluya horarios de atención. Sé cálido y persistente sin ser agresivo.
+   output mensaje_seguimiento
+
+# ─────────────────────────────────────────────────────────────────
+# PIPELINE PRINCIPAL: Flujo completo de venta
+# ─────────────────────────────────────────────────────────────────
+
+pipeline flujo_venta_completo
+   step saludar_cliente
+   step consultar_inventario
+   step generar_recomendacion
+   step crear_propuesta
+   step seguimiento
+
+# ─────────────────────────────────────────────────────────────────
+# PIPELINE RÁPIDO: Solo recomendación inmediata
+# ─────────────────────────────────────────────────────────────────
+
+pipeline consulta_rapida
+   step consultar_inventario
+   step generar_recomendacion

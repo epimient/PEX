@@ -1,3 +1,39 @@
+Metadata-Version: 2.4
+Name: pex-lang
+Version: 0.4.0
+Summary: PEX - Programs intention, not implementation. Lenguaje de programación cognitivo para IA.
+Author-email: Eddy <eddy@pex-lang.dev>
+License: MIT
+Project-URL: Homepage, https://github.com/eddy/pex
+Project-URL: Documentation, https://github.com/eddy/pex/docs
+Project-URL: Repository, https://github.com/eddy/pex.git
+Project-URL: Changelog, https://github.com/eddy/pex/blob/main/CHANGELOG.md
+Keywords: pex,programming language,AI,artificial intelligence,declarative,cognitive,DSL
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Languages
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.28.0
+Provides-Extra: openai
+Requires-Dist: openai>=1.0.0; extra == "openai"
+Provides-Extra: postgres
+Requires-Dist: psycopg2-binary>=2.9.0; extra == "postgres"
+Provides-Extra: ollama
+Requires-Dist: requests>=2.28.0; extra == "ollama"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+
 # PEX Language
 
 > **Programs intention, not implementation**
@@ -325,42 +361,6 @@ PEX/
 | Adapters disponibles | 10 |
 | Comandos CLI | 6 |
 | Reglas de linter | 15+ |
-
-### Extensión VS Code
-
-PEX incluye una extensión para VS Code con:
-
-- ✅ Syntax highlighting para archivos `.pi`
-- ✅ Snippets para todas las keywords
-- ✅ Comandos integrados (run, check, ast, plan, lint)
-- ✅ Atajos de teclado:
-  - `Ctrl+Shift+R` → Ejecutar
-  - `Ctrl+Shift+C` → Verificar
-  - `Ctrl+Shift+A` → Mostrar AST
-
-**Instalación:**
-
-```bash
-# Instalar extensión
-cd vscode-pex
-npm install -g vsce
-vsce package
-code --install-extension pex-0.4.0.vsix
-
-# O copiar manualmente
-cp -r vscode-pex ~/.vscode/extensions/pex-language
-```
-
-### Modo Conversacional
-
-PEX ahora soporta bots conversacionales. Ejemplo:
-
-```bash
-cd examples
-python3 pex_chat.py
-```
-
-Esto inicia un chat interactivo con el vendedor de carros.
 
 ### Roadmap
 

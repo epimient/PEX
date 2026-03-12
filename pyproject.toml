@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pex-lang"
+version = "0.4.0"
+description = "PEX - Programs intention, not implementation. Lenguaje de programación cognitivo para IA."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "Eddy", email = "eddy@pex-lang.dev"}
+]
+keywords = [
+  "pex",
+  "programming language",
+  "AI",
+  "artificial intelligence",
+  "declarative",
+  "cognitive",
+  "DSL"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Languages",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+  "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0.0"]
+postgres = ["psycopg2-binary>=2.9.0"]
+ollama = ["requests>=2.28.0"]
+dev = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "black>=23.0.0",
+  "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/eddy/pex"
+Documentation = "https://github.com/eddy/pex/docs"
+Repository = "https://github.com/eddy/pex.git"
+Changelog = "https://github.com/eddy/pex/blob/main/CHANGELOG.md"
+
+[project.scripts]
+pex = "pex.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pex*"]
+
+[tool.setuptools.package-data]
+pex = ["*.pyi"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | \.eggs
+  | \.mypy_cache
+  | \.pytest_cache
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = "pex.adapters.*"
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --cov=pex --cov-report=term-missing"
+testpaths = [
+  "tests",
+]
+python_files = [
+  "test_*.py",
+]
+python_classes = [
+  "Test*",
+]
+python_functions = [
+  "test_*",
+]

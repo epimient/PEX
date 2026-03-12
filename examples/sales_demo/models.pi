@@ -1,0 +1,10 @@
+# Modelos de IA - Models
+# Configuración de modelos de lenguaje
+
+model analyst
+    provider openai
+    name $OPENAI_MODEL
+
+model predictor
+    provider openai
+    name $OPENAI_MODEL

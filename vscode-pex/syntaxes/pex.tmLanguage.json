@@ -1,0 +1,95 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "PEX",
+  "scopeName": "source.pex",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#keywords" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#booleans" },
+    { "include": "#env-vars" },
+    { "include": "#multiline" }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.pex",
+          "match": "\\b(project|task|agent|pipeline|tool|model|memory|record|entity|import)\\b"
+        },
+        {
+          "name": "keyword.other.pex",
+          "match": "\\b(input|context|use|goal|output|step|provider|name|source|scope|sql|query|filter|table|field)\\b"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.pex",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.pex",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.pex",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.pex",
+          "begin": "'",
+          "end": "'"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.pex",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.float.pex",
+          "match": "\\b\\d+\\.\\d+\\b"
+        }
+      ]
+    },
+    "booleans": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.pex",
+          "match": "\\b(true|false)\\b"
+        }
+      ]
+    },
+    "env-vars": {
+      "patterns": [
+        {
+          "name": "variable.other.environment.pex",
+          "match": "\\$[A-Za-z_][A-Za-z0-9_]*"
+        }
+      ]
+    },
+    "multiline": {
+      "patterns": [
+        {
+          "name": "string.quoted.triple.pex",
+          "begin": "\"\"\"",
+          "end": "\"\"\""
+        }
+      ]
+    }
+  },
+  "fileTypes": ["pi"],
+  "firstLineMatch": "^#!.*\\bpex\\b"
+}

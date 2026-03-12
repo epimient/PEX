@@ -1,5 +1,26 @@
 # PEX Language Changelog
 
+## v0.4.1 (2025-03-12) — Bug Fixes & VS Code Extension
+
+### Bug Fixes
+- Fixed parser: IdentRef now correctly extracts string value for model names with special characters
+- Fixed runtime: Ollama adapter now properly resolves model names with `:` (e.g., "llama3:8b")
+
+### VS Code Extension Improvements
+- Added registered commands: pex.run, pex.check, pex.ast, pex.plan, pex.lint
+- Added keybindings: Ctrl+Shift+R (run), Ctrl+Shift+C (check), Ctrl+Shift+A (ast)
+- Extension now uses `pex` command instead of `python main.py`
+- Added icon (PNG format)
+
+### New Examples
+- `examples/bot_vendedor_carros.pi` — Complete sales bot with 5 tasks
+- `examples/inventario_carros.json` — Car inventory with 8 vehicles
+- `examples/bot_vendedor_chat.py` — Standalone conversational bot
+- `examples/pex_chat.py` — PEX library-based conversational bot
+- `examples/ollama_test.pi` — Simple Ollama integration test
+
+---
+
 ## v0.4.0 (2025) — Features Avanzadas
 
 ### New Features

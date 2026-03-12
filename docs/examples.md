@@ -460,4 +460,112 @@ pipeline monthly_segmentation
 
 ---
 
-*PEX Examples v0.3*
+## Bot Vendedor de Carros (Batch)
+
+Un ejemplo completo de flujo de ventas automatizado:
+
+```pex
+# bot_vendedor_carros.pi
+project bot_vendedor_carros
+
+model vendedor_asistente
+   provider ollama
+   name "llama3:8b"
+
+tool inventario_autos
+   provider file
+   source inventario_carros.json
+
+task saludar_cliente
+   model vendedor_asistente
+   goal Eres un vendedor de carros profesional. Saluda al cliente de manera cálida.
+   output saludo_inicial
+
+task consultar_inventario
+   input inventario_autos
+   model vendedor_asistente
+   goal Filtra los autos que coincidan con las preferencias del cliente.
+   output autos_sugeridos
+
+task generar_recomendacion
+   model vendedor_asistente
+   goal Recomienda el mejor auto explicando por qué es ideal.
+   output recomendacion_final
+
+pipeline flujo_venta_completo
+   step saludar_cliente
+   step consultar_inventario
+   step generar_recomendacion
+```
+
+**Run:**
+```bash
+pex run examples/bot_vendedor_carros.pi
+```
+
+---
+
+## Bot Conversacional (Interactivo)
+
+Chat en tiempo real con el vendedor de carros:
+
+```bash
+cd examples
+python3 pex_chat.py
+```
+
+Esto inicia una conversación interactiva:
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║     🤖 PEX BOT VENDEDOR DE CARROS - CONVERSACIONAL         ║
+║                    Premium Auto                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+🤖 Bot: ¡Bienvenido a Premium Auto! Soy Alex, tu asesor de ventas. 
+¿En qué puedo ayudarte hoy?
+
+👤 Tú: Busco un auto familiar
+🤖 Bot: ¡Excelente elección! Para una familia, te recomiendo el Hyundai Santa Fe...
+```
+
+---
+
+## Ollama con Inventario
+
+Combina Ollama local con herramientas de archivo:
+
+```pex
+# ollama_test.pi
+project ollama_test
+
+model assistant
+   provider ollama
+   name "llama3:8b"
+
+tool inventario
+   provider file
+   source inventario_carros.json
+
+task greet
+   model assistant
+   goal Eres un asistente amigable. Saluda al usuario.
+   output greeting
+
+pipeline hello
+   step greet
+```
+
+**Run:**
+```bash
+pex run examples/ollama_test.pi
+```
+
+**Nota:** Si el modelo tiene `:` en el nombre, usa comillas:
+```pex
+name "llama3:8b"
+```
+
+---
+
+*PEX Examples v0.4*
